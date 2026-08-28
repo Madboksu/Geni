@@ -1,0 +1,14 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <rect width="120" height="120" rx="16" fill="#1e293b" stroke="#38bdf8" stroke-width="4"/>
+  <!-- Head & Hair -->
+  <circle cx="60" cy="45" r="24" fill="#fde047"/>
+  <path d="M40 35 C45 20, 75 20, 80 35 C70 25, 50 25, 40 35 Z" fill="#0284c7"/>
+  <!-- Eyes -->
+  <circle cx="52" cy="45" r="3" fill="#0f172a"/>
+  <circle cx="68" cy="45" r="3" fill="#0f172a"/>
+  <!-- Smile -->
+  <path d="M54 56 Q60 62 66 56" stroke="#0f172a" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- Scarf / Amulet -->
+  <path d="M40 70 Q60 85 80 70 L75 105 L45 105 Z" fill="#0284c7"/>
+  <circle cx="60" cy="78" r="6" fill="#38bdf8" stroke="#ffffff" stroke-width="2"/>
+</svg>

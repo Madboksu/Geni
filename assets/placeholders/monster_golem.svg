@@ -1,0 +1,9 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <rect width="120" height="120" rx="16" fill="#1c1917" stroke="#ea580c" stroke-width="4"/>
+  <!-- Rock Body -->
+  <rect x="30" y="30" width="60" height="65" rx="8" fill="#44403c"/>
+  <!-- Fire Cracks -->
+  <path d="M40 40 L50 60 L45 85 M75 35 L65 55 L70 80" stroke="#f97316" stroke-width="3" fill="none"/>
+  <!-- Glowing Eye -->
+  <rect x="50" y="45" width="20" height="6" fill="#facc15"/>
+</svg>

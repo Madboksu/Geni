@@ -1,0 +1,70 @@
+extends Control
+
+signal entity_selected(entity_ui)
+
+@export var entity_data: BattleEntity
+
+@onready var texture_avatar: TextureRect = %TextureAvatar
+@onready var lbl_name: Label = %LblName
+@onready var hp_bar: ProgressBar = %HpBar
+@onready var lbl_hp: Label = %LblHp
+@onready var lbl_block: Label = %LblBlock
+@onready var container_status: HBoxContainer = %ContainerStatus
+@onready var badge_wet: PanelContainer = %BadgeWet
+@onready var badge_muddy: PanelContainer = %BadgeMuddy
+@onready var badge_stun: PanelContainer = %BadgeStun
+@onready var select_border: ReferenceRect = %SelectBorder
+
+var is_selected: bool = false
+
+func setup(p_entity: BattleEntity, avatar_texture: Texture2D = null) -> void:
+	entity_data = p_entity
+	if entity_data:
+		entity_data.hp_changed.connect(_on_hp_changed)
+		entity_data.block_changed.connect(_on_block_changed)
+		entity_data.status_changed.connect(_on_status_changed)
+	if avatar_texture:
+		texture_avatar.texture = avatar_texture
+	_update_ui()
+
+func _ready() -> void:
+	_update_ui()
+
+func _update_ui() -> void:
+	if not is_inside_tree() or not entity_data:
+		return
+	lbl_name.text = entity_data.entity_name
+	hp_bar.max_value = entity_data.max_hp
+	hp_bar.value = entity_data.current_hp
+	lbl_hp.text = "%d / %d" % [entity_data.current_hp, entity_data.max_hp]
+	lbl_block.text = "Block: %d" % entity_data.current_block
+	
+	badge_wet.visible = entity_data.is_wet
+	badge_muddy.visible = entity_data.is_muddy
+	badge_stun.visible = entity_data.is_stunned
+
+func set_selected(p_selected: bool) -> void:
+	is_selected = p_selected
+	select_border.visible = is_selected
+
+func _on_hp_changed(new_hp: int, max_hp: int) -> void:
+	hp_bar.value = new_hp
+	lbl_hp.text = "%d / %d" % [new_hp, max_hp]
+	
+	# Flash red on damage
+	var tween = create_tween()
+	tween.tween_property(texture_avatar, "modulate", Color(2.0, 0.4, 0.4), 0.1)
+	tween.tween_property(texture_avatar, "modulate", Color.WHITE, 0.2)
+
+func _on_block_changed(new_block: int) -> void:
+	lbl_block.text = "Block: %d" % new_block
+
+func _on_status_changed() -> void:
+	if entity_data:
+		badge_wet.visible = entity_data.is_wet
+		badge_muddy.visible = entity_data.is_muddy
+		badge_stun.visible = entity_data.is_stunned
+
+func _on_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		entity_selected.emit(self)

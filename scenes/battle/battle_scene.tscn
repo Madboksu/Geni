@@ -1,0 +1,186 @@
+[gd_scene load_steps=3 format=3 uid="uid://c_battle_scene"]
+
+[ext_resource type="Script" path="res://scenes/battle/battle_scene.gd" id="1_battle_scene"]
+[ext_resource type="PackedScene" uid="uid://c_reward_popup" path="res://scenes/battle/components/reward_popup.tscn" id="2_reward_popup"]
+
+[node name="BattleScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_battle_scene")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.08, 0.06, 0.1, 1)
+
+[node name="VBoxMain" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TopBar" type="MarginContainer" parent="VBoxMain"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 8
+
+[node name="HBox" type="HBoxContainer" parent="VBoxMain/TopBar"]
+layout_mode = 2
+
+[node name="LblEnergy" type="Label" parent="VBoxMain/TopBar/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.8, 0.2, 1)
+theme_override_font_sizes/font_size = 18
+text = "Energy: 3 / 3"
+
+[node name="VSeparator" type="VSeparator" parent="VBoxMain/TopBar/HBox"]
+layout_mode = 2
+
+[node name="LblBattleLog" type="Label" parent="VBoxMain/TopBar/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/font_size = 13
+text = "Fase Perencanaan: Susun kartu di slot antrean."
+
+[node name="Arena" type="HBoxContainer" parent="VBoxMain"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="ContainerPlayer" type="CenterContainer" parent="VBoxMain/Arena"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="VSeparator" type="VSeparator" parent="VBoxMain/Arena"]
+layout_mode = 2
+
+[node name="ContainerEnemies" type="HBoxContainer" parent="VBoxMain/Arena"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="QueueSection" type="PanelContainer" parent="VBoxMain"]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+
+[node name="Margin" type="MarginContainer" parent="VBoxMain/QueueSection"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 6
+
+[node name="HBox" type="HBoxContainer" parent="VBoxMain/QueueSection/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="QueueLabelBox" type="VBoxContainer" parent="VBoxMain/QueueSection/Margin/HBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="VBoxMain/QueueSection/Margin/HBox/QueueLabelBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "ACTION QUEUE"
+
+[node name="BtnExecute" type="Button" parent="VBoxMain/QueueSection/Margin/HBox/QueueLabelBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 45)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.9, 0.4, 1)
+theme_override_font_sizes/font_size = 14
+text = "PADAMKAN!"
+
+[node name="VSeparator" type="VSeparator" parent="VBoxMain/QueueSection/Margin/HBox"]
+layout_mode = 2
+
+[node name="ContainerQueue" type="HBoxContainer" parent="VBoxMain/QueueSection/Margin/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="HandSection" type="PanelContainer" parent="VBoxMain"]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+
+[node name="Margin" type="MarginContainer" parent="VBoxMain/HandSection"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="ScrollHand" type="ScrollContainer" parent="VBoxMain/HandSection/Margin"]
+layout_mode = 2
+horizontal_scroll_mode = 1
+vertical_scroll_mode = 0
+
+[node name="ContainerHand" type="HBoxContainer" parent="VBoxMain/HandSection/Margin/ScrollHand"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="RewardPopup" parent="." instance=ExtResource("2_reward_popup")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="WinLossPanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(350, 200)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -175.0
+offset_top = -100.0
+offset_right = 175.0
+offset_step = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="WinLossPanel"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="LblWinLossTitle" type="Label" parent="WinLossPanel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "VICTORY!"
+horizontal_alignment = 1
+
+[node name="BtnContinue" type="Button" parent="WinLossPanel/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Lanjutkan"

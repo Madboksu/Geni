@@ -1,0 +1,12 @@
+<svg width="140" height="140" viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+  <rect width="140" height="140" rx="20" fill="#450a0a" stroke="#dc2626" stroke-width="5"/>
+  <!-- Horns -->
+  <path d="M30 40 Q20 10 40 25 M110 40 Q120 10 100 25" stroke="#f97316" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <!-- Head -->
+  <polygon points="35,45 105,45 70,115" fill="#991b1b"/>
+  <!-- Glowing Eyes -->
+  <polygon points="50,60 62,60 56,70" fill="#fef08a"/>
+  <polygon points="90,60 78,60 84,70" fill="#fef08a"/>
+  <!-- Core Crest -->
+  <circle cx="70" cy="85" r="10" fill="#f97316" stroke="#fef08a" stroke-width="3"/>
+</svg>
