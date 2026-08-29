@@ -1,108 +1,294 @@
-[gd_scene load_steps=2 format=3 uid="uid://c_level_select"]
+[gd_scene load_steps=7 format=3 uid="uid://c6ixe1i0jxqwk"]
 
-[ext_resource type="Script" path="res://scenes/level_select/level_select.gd" id="1_level_select"]
+[ext_resource type="Script" path="res://scenes/level_select/level_select.gd" id="1_script"]
 
-[node name="LevelSelect" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("1_level_select")
+[sub_resource type="RectangleShape2D" id="Shape_player"]
+size = Vector2(20, 20)
+
+[sub_resource type="RectangleShape2D" id="Shape_gate"]
+size = Vector2(44, 44)
+
+[sub_resource type="RectangleShape2D" id="Shape_wall_h"]
+size = Vector2(960, 32)
+
+[sub_resource type="RectangleShape2D" id="Shape_wall_v"]
+size = Vector2(32, 640)
+
+[sub_resource type="RectangleShape2D" id="Shape_wall_inner"]
+size = Vector2(224, 32)
+
+[node name="LevelSelect" type="Node2D"]
+script = ExtResource("1_script")
 
 [node name="Background" type="ColorRect" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.06, 0.08, 0.12, 1)
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 960.0
+offset_bottom = 640.0
+color = Color(0.18, 0.22, 0.18, 1)
 
-[node name="Margin" type="MarginContainer" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 32
-theme_override_constants/margin_top = 24
-theme_override_constants/margin_right = 32
-theme_override_constants/margin_bottom = 24
+[node name="Floor" type="ColorRect" parent="."]
+offset_left = 32.0
+offset_top = 32.0
+offset_right = 928.0
+offset_bottom = 608.0
+color = Color(0.22, 0.28, 0.20, 1)
 
-[node name="VBox" type="VBoxContainer" parent="Margin"]
-layout_mode = 2
-theme_override_constants/separation = 20
+[node name="Walls" type="Node2D" parent="."]
 
-[node name="Header" type="HBoxContainer" parent="Margin/VBox"]
-layout_mode = 2
+[node name="WallTop" type="StaticBody2D" parent="Walls"]
+position = Vector2(480, 16)
+[node name="Col" type="CollisionShape2D" parent="Walls/WallTop"]
+shape = SubResource("Shape_wall_h")
+[node name="Vis" type="ColorRect" parent="Walls/WallTop"]
+offset_left = -480.0
+offset_top = -16.0
+offset_right = 480.0
+offset_bottom = 16.0
+color = Color(0.10, 0.10, 0.10, 1)
 
-[node name="BtnBack" type="Button" parent="Margin/VBox/Header"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(100, 35)
-layout_mode = 2
-text = "< Kembali"
+[node name="WallBottom" type="StaticBody2D" parent="Walls"]
+position = Vector2(480, 624)
+[node name="Col" type="CollisionShape2D" parent="Walls/WallBottom"]
+shape = SubResource("Shape_wall_h")
+[node name="Vis" type="ColorRect" parent="Walls/WallBottom"]
+offset_left = -480.0
+offset_top = -16.0
+offset_right = 480.0
+offset_bottom = 16.0
+color = Color(0.10, 0.10, 0.10, 1)
 
-[node name="LblActTitle" type="Label" parent="Margin/VBox/Header"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.9, 0.7, 0.2, 1)
-theme_override_font_sizes/font_size = 18
-text = "ACT 1: Lost On The Fire"
+[node name="WallLeft" type="StaticBody2D" parent="Walls"]
+position = Vector2(16, 320)
+[node name="Col" type="CollisionShape2D" parent="Walls/WallLeft"]
+shape = SubResource("Shape_wall_v")
+[node name="Vis" type="ColorRect" parent="Walls/WallLeft"]
+offset_left = -16.0
+offset_top = -320.0
+offset_right = 16.0
+offset_bottom = 320.0
+color = Color(0.10, 0.10, 0.10, 1)
+
+[node name="WallRight" type="StaticBody2D" parent="Walls"]
+position = Vector2(944, 320)
+[node name="Col" type="CollisionShape2D" parent="Walls/WallRight"]
+shape = SubResource("Shape_wall_v")
+[node name="Vis" type="ColorRect" parent="Walls/WallRight"]
+offset_left = -16.0
+offset_top = -320.0
+offset_right = 16.0
+offset_bottom = 320.0
+color = Color(0.10, 0.10, 0.10, 1)
+
+[node name="InnerWallA" type="StaticBody2D" parent="Walls"]
+position = Vector2(272, 192)
+[node name="Col" type="CollisionShape2D" parent="Walls/InnerWallA"]
+shape = SubResource("Shape_wall_inner")
+[node name="Vis" type="ColorRect" parent="Walls/InnerWallA"]
+offset_left = -112.0
+offset_top = -16.0
+offset_right = 112.0
+offset_bottom = 16.0
+color = Color(0.12, 0.15, 0.10, 1)
+
+[node name="InnerWallB" type="StaticBody2D" parent="Walls"]
+position = Vector2(700, 420)
+[node name="Col" type="CollisionShape2D" parent="Walls/InnerWallB"]
+shape = SubResource("Shape_wall_inner")
+[node name="Vis" type="ColorRect" parent="Walls/InnerWallB"]
+offset_left = -112.0
+offset_top = -16.0
+offset_right = 112.0
+offset_bottom = 16.0
+color = Color(0.12, 0.15, 0.10, 1)
+
+[node name="InnerWallC" type="StaticBody2D" parent="Walls"]
+position = Vector2(480, 320)
+[node name="Col" type="CollisionShape2D" parent="Walls/InnerWallC"]
+shape = SubResource("Shape_wall_inner")
+[node name="Vis" type="ColorRect" parent="Walls/InnerWallC"]
+offset_left = -112.0
+offset_top = -16.0
+offset_right = 112.0
+offset_bottom = 16.0
+color = Color(0.12, 0.15, 0.10, 1)
+
+[node name="Player" type="CharacterBody2D" parent="."]
+position = Vector2(100, 500)
+[node name="Col" type="CollisionShape2D" parent="Player"]
+shape = SubResource("Shape_player")
+[node name="Sprite" type="ColorRect" parent="Player"]
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+color = Color(0.2, 0.7, 1.0, 1)
+
+[node name="Gates" type="Node2D" parent="."]
+
+[node name="Gate_L1" type="Area2D" parent="Gates"]
+position = Vector2(180, 100)
+metadata/action = "battle"
+metadata/act = 1
+metadata/level = 1
+metadata/label = "L1 Tutorial"
+metadata/locked = false
+[node name="Col" type="CollisionShape2D" parent="Gates/Gate_L1"]
+shape = SubResource("Shape_gate")
+[node name="Sprite" type="ColorRect" parent="Gates/Gate_L1"]
+offset_left = -22.0
+offset_top = -22.0
+offset_right = 22.0
+offset_bottom = 22.0
+color = Color(1.0, 0.78, 0.0, 1)
+[node name="Label" type="Label" parent="Gates/Gate_L1"]
+offset_left = -30.0
+offset_top = 24.0
+offset_right = 60.0
+offset_bottom = 44.0
+text = "L1"
 horizontal_alignment = 1
 
-[node name="ActTabs" type="HBoxContainer" parent="Margin/VBox"]
-layout_mode = 2
-alignment = 1
+[node name="Gate_L2" type="Area2D" parent="Gates"]
+position = Vector2(380, 540)
+metadata/action = "battle"
+metadata/act = 1
+metadata/level = 2
+metadata/label = "L2 Pertarungan"
+metadata/locked = false
+[node name="Col" type="CollisionShape2D" parent="Gates/Gate_L2"]
+shape = SubResource("Shape_gate")
+[node name="Sprite" type="ColorRect" parent="Gates/Gate_L2"]
+offset_left = -22.0
+offset_top = -22.0
+offset_right = 22.0
+offset_bottom = 22.0
+color = Color(1.0, 0.78, 0.0, 1)
+[node name="Label" type="Label" parent="Gates/Gate_L2"]
+offset_left = -30.0
+offset_top = 24.0
+offset_right = 60.0
+offset_bottom = 44.0
+text = "L2"
+horizontal_alignment = 1
 
-[node name="BtnAct1" type="Button" parent="Margin/VBox/ActTabs"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(160, 40)
-layout_mode = 2
-text = "Act 1: Lost On The Fire"
+[node name="Gate_L3" type="Area2D" parent="Gates"]
+position = Vector2(640, 130)
+metadata/action = "battle"
+metadata/act = 1
+metadata/level = 3
+metadata/label = "L3 Hutan Api"
+metadata/locked = false
+[node name="Col" type="CollisionShape2D" parent="Gates/Gate_L3"]
+shape = SubResource("Shape_gate")
+[node name="Sprite" type="ColorRect" parent="Gates/Gate_L3"]
+offset_left = -22.0
+offset_top = -22.0
+offset_right = 22.0
+offset_bottom = 22.0
+color = Color(1.0, 0.78, 0.0, 1)
+[node name="Label" type="Label" parent="Gates/Gate_L3"]
+offset_left = -30.0
+offset_top = 24.0
+offset_right = 60.0
+offset_bottom = 44.0
+text = "L3"
+horizontal_alignment = 1
 
-[node name="BtnAct2" type="Button" parent="Margin/VBox/ActTabs"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(160, 40)
-layout_mode = 2
-text = "Act 2: Hunt the Flame"
+[node name="Gate_Boss" type="Area2D" parent="Gates"]
+position = Vector2(860, 340)
+metadata/action = "battle"
+metadata/act = 1
+metadata/level = 4
+metadata/label = "BOSS !!!"
+metadata/locked = false
+[node name="Col" type="CollisionShape2D" parent="Gates/Gate_Boss"]
+shape = SubResource("Shape_gate")
+[node name="Sprite" type="ColorRect" parent="Gates/Gate_Boss"]
+offset_left = -22.0
+offset_top = -22.0
+offset_right = 22.0
+offset_bottom = 22.0
+color = Color(0.9, 0.2, 0.1, 1)
+[node name="Label" type="Label" parent="Gates/Gate_Boss"]
+offset_left = -30.0
+offset_top = 24.0
+offset_right = 60.0
+offset_bottom = 44.0
+text = "BOSS"
+horizontal_alignment = 1
 
-[node name="ScrollLevels" type="ScrollContainer" parent="Margin/VBox"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 3
-horizontal_scroll_mode = 1
-vertical_scroll_mode = 0
+[node name="Gate_Save" type="Area2D" parent="Gates"]
+position = Vector2(100, 300)
+metadata/action = "save"
+metadata/act = 0
+metadata/level = 0
+metadata/label = "Simpan Game"
+metadata/locked = false
+[node name="Col" type="CollisionShape2D" parent="Gates/Gate_Save"]
+shape = SubResource("Shape_gate")
+[node name="Sprite" type="ColorRect" parent="Gates/Gate_Save"]
+offset_left = -22.0
+offset_top = -22.0
+offset_right = 22.0
+offset_bottom = 22.0
+color = Color(0.2, 0.8, 0.5, 1)
+[node name="Label" type="Label" parent="Gates/Gate_Save"]
+offset_left = -30.0
+offset_top = 24.0
+offset_right = 60.0
+offset_bottom = 44.0
+text = "SAVE"
+horizontal_alignment = 1
 
-[node name="CenterWrapper" type="CenterContainer" parent="Margin/VBox/ScrollLevels"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
+[node name="Gate_Exit" type="Area2D" parent="Gates"]
+position = Vector2(860, 560)
+metadata/action = "main_menu"
+metadata/act = 0
+metadata/level = 0
+metadata/label = "Keluar ke Menu"
+metadata/locked = false
+[node name="Col" type="CollisionShape2D" parent="Gates/Gate_Exit"]
+shape = SubResource("Shape_gate")
+[node name="Sprite" type="ColorRect" parent="Gates/Gate_Exit"]
+offset_left = -22.0
+offset_top = -22.0
+offset_right = 22.0
+offset_bottom = 22.0
+color = Color(0.5, 0.5, 0.9, 1)
+[node name="Label" type="Label" parent="Gates/Gate_Exit"]
+offset_left = -30.0
+offset_top = 24.0
+offset_right = 60.0
+offset_bottom = 44.0
+text = "MENU"
+horizontal_alignment = 1
 
-[node name="ContainerLevels" type="HBoxContainer" parent="Margin/VBox/ScrollLevels/CenterWrapper"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_constants/separation = 20
-alignment = 1
+[node name="UI" type="CanvasLayer" parent="."]
 
-[node name="DeckPanel" type="PanelContainer" parent="Margin/VBox"]
-custom_minimum_size = Vector2(0, 60)
-layout_mode = 2
+[node name="ActLabel" type="Label" parent="UI"]
+offset_left = 16.0
+offset_top = 8.0
+offset_right = 300.0
+offset_bottom = 36.0
+text = "ACT 1"
+theme_override_font_sizes/font_size = 18
 
-[node name="Margin" type="MarginContainer" parent="Margin/VBox/DeckPanel"]
-layout_mode = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 8
+[node name="HintLabel" type="Label" parent="UI"]
+visible = false
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 160.0
+offset_bottom = 28.0
+text = "[E] Masuk"
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_font_sizes/font_size = 16
 
-[node name="LblDeckSummary" type="Label" parent="Margin/VBox/DeckPanel/Margin"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
-theme_override_font_sizes/font_size = 11
-text = "Deck Summary..."
-autowrap_mode = 3
+[node name="ControlsHint" type="Label" parent="UI"]
+offset_left = 16.0
+offset_top = 610.0
+offset_right = 500.0
+offset_bottom = 634.0
+text = "Arrow Keys / WASD: Gerak   |   E / Space: Interaksi"
+theme_override_font_sizes/font_size = 13
+modulate = Color(0.8, 0.8, 0.8, 1)
