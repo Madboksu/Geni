@@ -47,6 +47,9 @@ func unlock_next_level() -> void:
 			act2_max_level_unlocked = max(act2_max_level_unlocked, 1)
 	elif current_act == 2:
 		act2_max_level_unlocked = max(act2_max_level_unlocked, current_level + 1)
+		
+	if StoryData.active_save_slot > 0:
+		SaveManager.save_game(StoryData.active_save_slot)
 
 func load_scene(scene_path: String) -> void:
 	get_tree().change_scene_to_file(scene_path)

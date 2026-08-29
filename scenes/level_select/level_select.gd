@@ -39,24 +39,28 @@ func _update_ui() -> void:
 	
 	for i in range(1, max_levels + 1):
 		var btn = Button.new()
-		btn.custom_minimum_size = Vector2(100, 100)
+		btn.custom_minimum_size = Vector2(130, 130)
 		var is_unlocked = (i <= max_unlocked)
 		var level_num = i
 		
+		var title_text = ""
 		if selected_act == 1 and level_num == 4:
-			btn.text = "Level %d\n[ BOSS ]" % level_num
+			title_text = "Level %d\n[ BOSS ]" % level_num
 		elif selected_act == 2 and (level_num == 4 or level_num == 8):
-			btn.text = "Level %d\n[ BOSS ]" % level_num
+			title_text = "Level %d\n[ BOSS ]" % level_num
 		elif level_num == 1:
-			btn.text = "Level %d\n(Tutorial)" % level_num
+			title_text = "Level %d\n(Tutorial)" % level_num
 		else:
-			btn.text = "Level %d" % level_num
+			title_text = "Level %d" % level_num
 			
 		if not is_unlocked:
 			btn.disabled = true
-			btn.text += "\n[ Terkunci ]"
+			btn.text = title_text + "\n🔒 Terkunci"
+		else:
+			btn.disabled = false
+			btn.text = title_text + "\n▶ Main"
+			btn.pressed.connect(_start_level.bind(level_num))
 			
-		btn.pressed.connect(func(): _start_level(level_num))
 		container_levels.add_child(btn)
 
 func _start_level(level_num: int) -> void:
