@@ -17,7 +17,7 @@ func _ready() -> void:
 	reset_to_act1_starter_deck()
 
 func reset_to_act1_starter_deck() -> void:
-	# Starter deck according to Act 1 GDD specification
+	# Starter deck according to Act 1 GDD specification + new test cards
 	player_deck = [
 		"dewblade", "dewblade",
 		"root_shield", "root_shield",

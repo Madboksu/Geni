@@ -14,6 +14,7 @@ func _init_database() -> void:
 	dewblade.cost = 1
 	dewblade.damage = 5
 	dewblade.description = "Memberikan 5 Damage."
+	dewblade.texture_path = "res://assets/card/Dewblade.png"
 	cards["dewblade"] = dewblade
 
 	# 2. Root Shield
@@ -24,6 +25,7 @@ func _init_database() -> void:
 	root_shield.cost = 1
 	root_shield.block = 5
 	root_shield.description = "Memberikan 5 Block."
+	root_shield.texture_path = "res://assets/card/Root shield card.png"
 	cards["root_shield"] = root_shield
 
 	# 3. Douse (Primer)
@@ -59,6 +61,7 @@ func _init_database() -> void:
 	gale_wind.combo_damage = 20
 	gale_wind.combo_applies_status = CardData.StatusType.STUN
 	gale_wind.description = "8 Damage. Jika target [Wet]: 20 Damage + [Stun]."
+	gale_wind.texture_path = "res://assets/card/Gale wind card.png"
 	cards["gale_wind"] = gale_wind
 
 	# 6. Thunder Strike (Igniter)

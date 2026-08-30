@@ -1,0 +1,6 @@
+res://scenes/battle/components/entity_ui.gd
+res://scenes/battle/components/entity_ui.tscn
+res://scenes/battle/components/card_ui.tscn
+res://scenes/battle/components/card_ui.gd
+res://scenes/battle/battle_scene.tscn
+res://scenes/main_menu/main_menu.tscn

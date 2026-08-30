@@ -70,18 +70,17 @@ custom_minimum_size = Vector2(160, 40)
 layout_mode = 2
 text = "Act 2: Hunt the Flame"
 
-[node name="CenterLevels" type="CenterContainer" parent="Margin/VBox"]
+[node name="Scroll" type="ScrollContainer" parent="Margin/VBox"]
 layout_mode = 2
 size_flags_vertical = 3
-
-[node name="Scroll" type="ScrollContainer" parent="Margin/VBox/CenterLevels"]
-layout_mode = 2
 horizontal_scroll_mode = 1
 vertical_scroll_mode = 0
 
-[node name="ContainerLevels" type="HBoxContainer" parent="Margin/VBox/CenterLevels/Scroll"]
+[node name="ContainerLevels" type="HBoxContainer" parent="Margin/VBox/Scroll"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme_override_constants/separation = 16
 alignment = 1
 

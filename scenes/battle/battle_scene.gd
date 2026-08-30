@@ -66,6 +66,7 @@ func _setup_battle() -> void:
 	player_ui_node = entity_ui_scene.instantiate()
 	container_player.add_child(player_ui_node)
 	player_ui_node.setup(player_entity, avatar_player_tex)
+	player_ui_node.card_dropped_on_me.connect(_on_card_dropped.bind(player_entity))
 	
 	# 2. Setup Enemies based on level
 	enemy_entities.clear()
@@ -87,6 +88,7 @@ func _setup_battle() -> void:
 		enemy_ui.setup(enemy, cfg["texture"])
 		var enemy_idx = i
 		enemy_ui.entity_selected.connect(func(_ui): _select_target_enemy(enemy_idx))
+		enemy_ui.card_dropped_on_me.connect(_on_card_dropped.bind(enemy))
 		enemy_ui_nodes.append(enemy_ui)
 		
 	if enemy_ui_nodes.size() > 0:
@@ -97,14 +99,9 @@ func _setup_battle() -> void:
 	draw_pile.shuffle()
 	discard_pile.clear()
 	
-	# 4. Setup Queue UI Slots (3 slots)
+	# 4. Queue slots removed
 	for child in container_queue.get_children():
 		child.queue_free()
-	for i in range(3):
-		var slot = queue_slot_ui_scene.instantiate()
-		container_queue.add_child(slot)
-		slot.setup(i)
-		slot.slot_clicked.connect(_on_queue_slot_clicked)
 		
 	_start_player_turn()
 
@@ -159,14 +156,12 @@ func _start_player_turn() -> void:
 	current_energy = max_energy
 	_update_energy_ui()
 	player_entity.reset_turn()
-	queued_cards.clear()
-	_update_queue_ui()
 	
 	# Draw 5 cards
 	_draw_cards(5)
 	_render_hand_ui()
 	btn_execute.disabled = false
-	_log("Fase Perencanaan: Pilih kartu untuk dimasukkan ke antrean slot.")
+	_log("Giliran Pemain: Tarik dan lepaskan kartu ke target musuh.")
 
 func _draw_cards(count: int) -> void:
 	for i in range(count):
@@ -188,90 +183,55 @@ func _render_hand_ui() -> void:
 		var card_ui = card_ui_scene.instantiate()
 		container_hand.add_child(card_ui)
 		card_ui.setup(card_data)
-		card_ui.card_clicked.connect(_on_hand_card_clicked)
 
 func _update_energy_ui() -> void:
-	var total_queued_cost = 0
-	for c in queued_cards:
-		total_queued_cost += c.cost
-	var remaining = current_energy - total_queued_cost
-	lbl_energy.text = "Energy: %d / %d" % [remaining, max_energy]
+	lbl_energy.text = "Energy: %d / %d" % [current_energy, max_energy]
 
-func _on_hand_card_clicked(card_ui) -> void:
-	if is_executing or not card_ui or not card_ui.card_data:
-		return
-	var card = card_ui.card_data
-	
-	# Calculate remaining energy
-	var used_energy = 0
-	for c in queued_cards:
-		used_energy += c.cost
-	
-	if used_energy + card.cost > current_energy:
-		_log("Energy tidak cukup untuk kartu " + card.name)
+func _on_card_dropped(card_data: CardData, target_entity: BattleEntity) -> void:
+	if is_executing:
 		return
 		
-	if queued_cards.size() >= 3:
-		_log("Slot antrean sudah penuh (Maksimal 3 kartu).")
+	if current_energy < card_data.cost:
+		_log("Energy tidak cukup untuk kartu " + card_data.name)
 		return
 		
-	# Move card from hand to queued_cards
-	hand.erase(card)
-	queued_cards.append(card)
-	_render_hand_ui()
-	_update_queue_ui()
-	_update_energy_ui()
-
-func _on_queue_slot_clicked(slot_index: int) -> void:
-	if is_executing or slot_index < 0 or slot_index >= queued_cards.size():
+	var card_ui_to_remove = null
+	for child in container_hand.get_children():
+		if child.card_data == card_data:
+			card_ui_to_remove = child
+			break
+			
+	if not card_ui_to_remove:
 		return
-	# Remove card from queue back to hand
-	var card = queued_cards[slot_index]
-	queued_cards.remove_at(slot_index)
-	hand.append(card)
-	_render_hand_ui()
-	_update_queue_ui()
+		
+	current_energy -= card_data.cost
 	_update_energy_ui()
+	
+	hand.erase(card_data)
+	discard_pile.append(card_data.id)
+	card_ui_to_remove.queue_free()
+	
+	_start_single_execution(card_data, target_entity)
 
-func _update_queue_ui() -> void:
-	var slots = container_queue.get_children()
-	for i in range(slots.size()):
-		if i < queued_cards.size():
-			slots[i].set_queued_card(queued_cards[i])
-		else:
-			slots[i].clear_slot()
+func _start_single_execution(card: CardData, target_entity: BattleEntity) -> void:
+	is_executing = true
+	_log("Eksekusi Kartu [%s] pada [%s]" % [card.name, target_entity.entity_name])
+	
+	_execute_card_effect(card, target_entity)
+	
+	if target_entity and target_entity.current_hp <= 0:
+		_auto_select_alive_target()
+		
+	if _check_all_enemies_dead():
+		_on_battle_victory()
+		return
+		
+	await get_tree().create_timer(0.6).timeout
+	is_executing = false
 
 func _on_btn_execute_pressed() -> void:
-	if is_executing or queued_cards.size() == 0:
-		_log("Pilih minimal 1 kartu sebelum menekan tombol Padamkan!")
+	if is_executing:
 		return
-	_start_execution_phase()
-
-func _start_execution_phase() -> void:
-	is_executing = true
-	btn_execute.disabled = true
-	_log("=== FASE EKSEKUSI PADAMKAN! ===")
-	
-	var target_enemy = enemy_entities[target_enemy_index] if target_enemy_index < enemy_entities.size() else null
-	
-	for i in range(queued_cards.size()):
-		var card = queued_cards[i]
-		_log("Eksekusi Slot %d: Kartu [%s]" % [i + 1, card.name])
-		await get_tree().create_timer(0.6).timeout
-		
-		_execute_card_effect(card, target_enemy)
-		
-		# Check if target died -> switch to next alive target
-		if target_enemy and target_enemy.current_hp <= 0:
-			_auto_select_alive_target()
-			target_enemy = enemy_entities[target_enemy_index] if target_enemy_index < enemy_entities.size() else null
-			
-		if _check_all_enemies_dead():
-			_on_battle_victory()
-			return
-			
-	queued_cards.clear()
-	_update_queue_ui()
 	
 	# Discard remaining hand
 	for card in hand:
@@ -279,7 +239,6 @@ func _start_execution_phase() -> void:
 	hand.clear()
 	_render_hand_ui()
 	
-	await get_tree().create_timer(0.8).timeout
 	_enemy_turn_phase()
 
 func _execute_card_effect(card: CardData, target: BattleEntity) -> void:

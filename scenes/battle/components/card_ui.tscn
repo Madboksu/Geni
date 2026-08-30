@@ -1,68 +1,72 @@
-[gd_scene load_steps=2 format=3 uid="uid://c_card_ui_scene"]
+[gd_scene format=3 uid="uid://dof60dak2l02n"]
 
-[ext_resource type="Script" path="res://scenes/battle/components/card_ui.gd" id="1_card_ui"]
+[ext_resource type="Script" uid="uid://jps73wj5mu4c" path="res://scenes/battle/components/card_ui.gd" id="1_card_ui"]
+[ext_resource type="Texture2D" uid="uid://3ssv07g83x5x" path="res://assets/card/Dewblade.png" id="2_3b1wn"]
+[ext_resource type="FontFile" uid="uid://6g8f2q64fk0u" path="res://assets/card/PublicPixel.ttf" id="3_rgeur"]
 
-[node name="CardUI" type="Control"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gwcng"]
+
+[node name="CardUI" type="Control" unique_id=2116957101]
 custom_minimum_size = Vector2(130, 180)
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_card_ui")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="CardTexture" type="TextureRect" parent="." unique_id=470718032]
+unique_name_in_owner = true
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 1
+texture = ExtResource("2_3b1wn")
+expand_mode = 1
+stretch_mode = 5
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=154948515]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_gwcng")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=103706984]
+visible = false
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 6
 theme_override_constants/margin_top = 6
 theme_override_constants/margin_right = 6
 theme_override_constants/margin_bottom = 6
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=1768947496]
+visible = false
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 4
 
-[node name="Header" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="Header" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=66827943]
+visible = false
 layout_mode = 2
+mouse_filter = 2
 
-[node name="TypeBadge" type="Panel" parent="PanelContainer/MarginContainer/VBoxContainer/Header"]
+[node name="TypeBadge" type="Panel" parent="PanelContainer/MarginContainer/VBoxContainer/Header" unique_id=966400463]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
+mouse_filter = 2
 
-[node name="LblCost" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/Header/TypeBadge"]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 14
-text = "1"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="LblTitle" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/Header"]
-unique_name_in_owner = true
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1730766971]
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 12
-text = "Card Title"
-horizontal_alignment = 1
-autowrap_mode = 3
+mouse_filter = 2
 
-[node name="HSeparator" type="HSeparator" parent="PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="LblType" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="LblType" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=957612033]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
@@ -70,13 +74,53 @@ theme_override_font_sizes/font_size = 10
 text = "PRIMER"
 horizontal_alignment = 1
 
-[node name="LblDescription" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="LblCost" type="Label" parent="." unique_id=133871437]
 unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_font_sizes/font_size = 11
-text = "Card effect description goes here."
+visible = false
+layout_mode = 0
+offset_left = -50.0
+offset_top = 8.0
+offset_right = 68.0
+offset_bottom = 28.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LblTitle" type="Label" parent="." unique_id=698016515]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 18.0
+offset_top = 117.0
+offset_right = 115.0
+offset_bottom = 123.0
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_rgeur")
+theme_override_font_sizes/font_size = 5
+text = "Card Title"
+horizontal_alignment = 1
 autowrap_mode = 3
+
+[node name="LblDescription" type="RichTextLabel" parent="." unique_id=435693141]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 28.0
+offset_top = 137.0
+offset_right = 104.0
+offset_bottom = 153.0
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_fonts/normal_font = ExtResource("3_rgeur")
+theme_override_fonts/bold_font = ExtResource("3_rgeur")
+theme_override_fonts/bold_italics_font = ExtResource("3_rgeur")
+theme_override_fonts/italics_font = ExtResource("3_rgeur")
+theme_override_fonts/mono_font = ExtResource("3_rgeur")
+theme_override_font_sizes/normal_font_size = 3
+bbcode_enabled = true
+text = "Card effect description goes here."
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
