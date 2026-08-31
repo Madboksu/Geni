@@ -386,9 +386,11 @@ func _on_battle_defeat() -> void:
 
 func _on_btn_continue_pressed() -> void:
 	if player_entity.current_hp > 0:
+		# Victory: HP sudah di-save di _on_battle_victory, langsung ke level select
 		GameManager.load_scene("res://scenes/level_select/level_select.tscn")
 	else:
-		GameManager.reset_to_act1_starter_deck()
+		# Defeat: reset HP saja, deck dan progress unlock tetap
+		GameManager.reset_run()
 		GameManager.load_scene("res://scenes/level_select/level_select.tscn")
 
 func _log(msg: String) -> void:

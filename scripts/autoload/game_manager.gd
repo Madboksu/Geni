@@ -34,6 +34,14 @@ func reset_to_act1_starter_deck() -> void:
 	]
 	player_max_hp = 50
 	player_current_hp = 50
+	current_act = 1
+	current_level = 1
+	act1_max_level_unlocked = 1
+	act2_max_level_unlocked = 1
+
+## Reset HP saja setelah kalah — deck dan unlock TETAP tersimpan
+func reset_run() -> void:
+	player_current_hp = player_max_hp
 
 func add_card_to_deck(card_id: String) -> void:
 	player_deck.append(card_id)
@@ -47,7 +55,7 @@ func unlock_next_level() -> void:
 			act2_max_level_unlocked = max(act2_max_level_unlocked, 1)
 	elif current_act == 2:
 		act2_max_level_unlocked = max(act2_max_level_unlocked, current_level + 1)
-		
+
 	if StoryData.active_save_slot > 0:
 		SaveManager.save_game(StoryData.active_save_slot)
 
