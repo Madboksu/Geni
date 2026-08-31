@@ -1,6 +1,7 @@
 extends Control
 
 signal entity_selected(entity_ui)
+signal card_dropped_on_me(card_data: CardData)
 
 @export var entity_data: BattleEntity
 
@@ -18,11 +19,22 @@ signal entity_selected(entity_ui)
 var is_selected: bool = false
 
 func setup(p_entity: BattleEntity, avatar_texture: Texture2D = null) -> void:
+	# Putuskan sinyal lama jika sebelumnya sudah ada data
+	if entity_data:
+		entity_data.hp_changed.disconnect(_on_hp_changed)
+		entity_data.block_changed.disconnect(_on_block_changed)
+		entity_data.status_changed.disconnect(_on_status_changed)
+		
 	entity_data = p_entity
 	if entity_data:
 		entity_data.hp_changed.connect(_on_hp_changed)
 		entity_data.block_changed.connect(_on_block_changed)
 		entity_data.status_changed.connect(_on_status_changed)
+		
+	# Mencegah crash jika setup dipanggil sebelum add_child()
+	if not is_inside_tree():
+		await ready 
+		
 	if avatar_texture:
 		texture_avatar.texture = avatar_texture
 	_update_ui()
@@ -51,7 +63,6 @@ func _on_hp_changed(new_hp: int, max_hp: int) -> void:
 	hp_bar.value = new_hp
 	lbl_hp.text = "%d / %d" % [new_hp, max_hp]
 	
-	# Flash red on damage
 	var tween = create_tween()
 	tween.tween_property(texture_avatar, "modulate", Color(2.0, 0.4, 0.4), 0.1)
 	tween.tween_property(texture_avatar, "modulate", Color.WHITE, 0.2)
@@ -68,3 +79,16 @@ func _on_status_changed() -> void:
 func _on_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		entity_selected.emit(self)
+
+func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
+	if data is CardData:
+		# Opsional: Kamu bisa menambahkan logika visual hover di sini
+		# misal: set_selected(true)
+		return true
+	return false
+
+func _drop_data(at_position: Vector2, data: Variant) -> void:
+	if data is CardData:
+		# Opsional: Matikan visual hover setelah di-drop
+		# set_selected(false)
+		card_dropped_on_me.emit(data)

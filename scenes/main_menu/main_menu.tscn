@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://c_main_menu"]
+[gd_scene format=3 uid="uid://buks834s1yido"]
 
-[ext_resource type="Script" path="res://scenes/main_menu/main_menu.gd" id="1_main_menu"]
+[ext_resource type="Script" uid="uid://xhx7yd5xjnhx" path="res://scenes/main_menu/main_menu.gd" id="1_main_menu"]
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Control" unique_id=2038060459]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,7 +11,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_main_menu")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=1623529165]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,7 +20,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.05, 0.07, 0.1, 1)
 
-[node name="Margin" type="MarginContainer" parent="."]
+[node name="Margin" type="MarginContainer" parent="." unique_id=799624149]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -32,68 +32,68 @@ theme_override_constants/margin_top = 48
 theme_override_constants/margin_right = 64
 theme_override_constants/margin_bottom = 48
 
-[node name="VBox" type="VBoxContainer" parent="Margin"]
+[node name="VBox" type="VBoxContainer" parent="Margin" unique_id=294726737]
 layout_mode = 2
 theme_override_constants/separation = 24
 
-[node name="TitleBox" type="VBoxContainer" parent="Margin/VBox"]
+[node name="TitleBox" type="VBoxContainer" parent="Margin/VBox" unique_id=586195282]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="GameTitle" type="Label" parent="Margin/VBox/TitleBox"]
+[node name="GameTitle" type="Label" parent="Margin/VBox/TitleBox" unique_id=2121197205]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3, 0.8, 1, 1)
 theme_override_font_sizes/font_size = 32
 text = "CHAIN REACTION"
 horizontal_alignment = 1
 
-[node name="Subtitle" type="Label" parent="Margin/VBox/TitleBox"]
+[node name="Subtitle" type="Label" parent="Margin/VBox/TitleBox" unique_id=1562912514]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
 theme_override_font_sizes/font_size = 14
 text = "2D Pixel Card Game Engine — Reaksi Berantai Elemen"
 horizontal_alignment = 1
 
-[node name="CenterMenu" type="CenterContainer" parent="Margin/VBox"]
+[node name="CenterMenu" type="CenterContainer" parent="Margin/VBox" unique_id=2028980399]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="MenuButtons" type="VBoxContainer" parent="Margin/VBox/CenterMenu"]
+[node name="MenuButtons" type="VBoxContainer" parent="Margin/VBox/CenterMenu" unique_id=654526018]
 custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="BtnContinue" type="Button" parent="Margin/VBox/CenterMenu/MenuButtons"]
+[node name="BtnContinue" type="Button" parent="Margin/VBox/CenterMenu/MenuButtons" unique_id=324693130]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
 text = "Lanjutkan Game"
 
-[node name="BtnNewGame" type="Button" parent="Margin/VBox/CenterMenu/MenuButtons"]
+[node name="BtnNewGame" type="Button" parent="Margin/VBox/CenterMenu/MenuButtons" unique_id=750398097]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
 text = "Game Baru"
 
-[node name="BtnCredit" type="Button" parent="Margin/VBox/CenterMenu/MenuButtons"]
+[node name="BtnCredit" type="Button" parent="Margin/VBox/CenterMenu/MenuButtons" unique_id=1775108291]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
 text = "Credit"
 
-[node name="BtnSettings" type="Button" parent="Margin/VBox/CenterMenu/MenuButtons"]
+[node name="BtnSettings" type="Button" parent="Margin/VBox/CenterMenu/MenuButtons" unique_id=693729040]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
 text = "Settings"
 
-[node name="BtnQuit" type="Button" parent="Margin/VBox/CenterMenu/MenuButtons"]
+[node name="BtnQuit" type="Button" parent="Margin/VBox/CenterMenu/MenuButtons" unique_id=1430538052]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
 text = "Keluar (Quit)"
 
-[node name="PopupSaves" type="PanelContainer" parent="."]
+[node name="PopupSaves" type="PanelContainer" parent="." unique_id=1858910025]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(360, 260)
@@ -110,49 +110,49 @@ offset_bottom = 130.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Margin" type="MarginContainer" parent="PopupSaves"]
+[node name="Margin" type="MarginContainer" parent="PopupSaves" unique_id=278288977]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="VBox" type="VBoxContainer" parent="PopupSaves/Margin"]
+[node name="VBox" type="VBoxContainer" parent="PopupSaves/Margin" unique_id=688639467]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Title" type="Label" parent="PopupSaves/Margin/VBox"]
+[node name="Title" type="Label" parent="PopupSaves/Margin/VBox" unique_id=1289039936]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "PILIH SLOT SAVE"
 horizontal_alignment = 1
 
-[node name="BtnSaveSlot1" type="Button" parent="PopupSaves/Margin/VBox"]
+[node name="BtnSaveSlot1" type="Button" parent="PopupSaves/Margin/VBox" unique_id=2066565622]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 text = "Slot 1"
 
-[node name="BtnSaveSlot2" type="Button" parent="PopupSaves/Margin/VBox"]
+[node name="BtnSaveSlot2" type="Button" parent="PopupSaves/Margin/VBox" unique_id=922375365]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 text = "Slot 2"
 
-[node name="BtnSaveSlot3" type="Button" parent="PopupSaves/Margin/VBox"]
+[node name="BtnSaveSlot3" type="Button" parent="PopupSaves/Margin/VBox" unique_id=2102838781]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 text = "Slot 3"
 
-[node name="BtnCloseSaves" type="Button" parent="PopupSaves/Margin/VBox"]
+[node name="BtnCloseSaves" type="Button" parent="PopupSaves/Margin/VBox" unique_id=1070742739]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 32)
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Tutup"
 
-[node name="PopupCredits" type="PanelContainer" parent="."]
+[node name="PopupCredits" type="PanelContainer" parent="." unique_id=505162239]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(400, 220)
@@ -169,24 +169,24 @@ offset_bottom = 110.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Margin" type="MarginContainer" parent="PopupCredits"]
+[node name="Margin" type="MarginContainer" parent="PopupCredits" unique_id=109055544]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="VBox" type="VBoxContainer" parent="PopupCredits/Margin"]
+[node name="VBox" type="VBoxContainer" parent="PopupCredits/Margin" unique_id=1060423303]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Title" type="Label" parent="PopupCredits/Margin/VBox"]
+[node name="Title" type="Label" parent="PopupCredits/Margin/VBox" unique_id=1622470692]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "CREDITS"
 horizontal_alignment = 1
 
-[node name="Content" type="Label" parent="PopupCredits/Margin/VBox"]
+[node name="Content" type="Label" parent="PopupCredits/Margin/VBox" unique_id=1720375956]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 12
@@ -198,14 +198,14 @@ Terima Kasih Telah Memainkan Game Ini!"
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="BtnCloseCredits" type="Button" parent="PopupCredits/Margin/VBox"]
+[node name="BtnCloseCredits" type="Button" parent="PopupCredits/Margin/VBox" unique_id=2137037085]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 32)
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Tutup"
 
-[node name="PopupSettings" type="PanelContainer" parent="."]
+[node name="PopupSettings" type="PanelContainer" parent="." unique_id=1384958607]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(360, 200)
@@ -222,33 +222,33 @@ offset_bottom = 100.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Margin" type="MarginContainer" parent="PopupSettings"]
+[node name="Margin" type="MarginContainer" parent="PopupSettings" unique_id=366071748]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="VBox" type="VBoxContainer" parent="PopupSettings/Margin"]
+[node name="VBox" type="VBoxContainer" parent="PopupSettings/Margin" unique_id=543176559]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Title" type="Label" parent="PopupSettings/Margin/VBox"]
+[node name="Title" type="Label" parent="PopupSettings/Margin/VBox" unique_id=277866813]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "SETTINGS"
 horizontal_alignment = 1
 
-[node name="AudioLabel" type="Label" parent="PopupSettings/Margin/VBox"]
+[node name="AudioLabel" type="Label" parent="PopupSettings/Margin/VBox" unique_id=1440966155]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Volume Suara Master: 100%"
 
-[node name="HSlider" type="HSlider" parent="PopupSettings/Margin/VBox"]
+[node name="HSlider" type="HSlider" parent="PopupSettings/Margin/VBox" unique_id=861326503]
 layout_mode = 2
 value = 100.0
 
-[node name="BtnCloseSettings" type="Button" parent="PopupSettings/Margin/VBox"]
+[node name="BtnCloseSettings" type="Button" parent="PopupSettings/Margin/VBox" unique_id=1388863716]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 32)
 layout_mode = 2

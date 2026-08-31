@@ -9,6 +9,7 @@ enum StatusType { NONE, WET, MUDDY, STUN }
 @export var type: CardType = CardType.ATTACK
 @export var cost: int = 1
 @export var description: String = ""
+@export var texture_path: String = ""
 
 # Base Effects
 @export var damage: int = 0
