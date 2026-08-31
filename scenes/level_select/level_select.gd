@@ -1,72 +1,119 @@
-extends Control
+extends Node2D
 
-@onready var lbl_act_title: Label = %LblActTitle
-@onready var container_levels: HBoxContainer = %ContainerLevels
-@onready var btn_act1: Button = %BtnAct1
-@onready var btn_act2: Button = %BtnAct2
-@onready var btn_back: Button = %BtnBack
-@onready var lbl_deck_summary: Label = %LblDeckSummary
+# ─────────────────────────────────────────────
+#  OVERWORLD LEVEL SELECT
+#  Karakter bisa gerak bebas, masuk gerbang
+#  untuk ke battle scene atau tempat lain.
+# ─────────────────────────────────────────────
 
-var selected_act: int = 1
+const SPEED := 120.0
+
+# Referensi node
+@onready var player: CharacterBody2D = $Player
+@onready var hint_label: Label       = $UI/HintLabel
+@onready var act_label: Label        = $UI/ActLabel
+
+# Gerbang yang sedang disentuh player (null = tidak ada)
+var current_gate: Node = null
+
 
 func _ready() -> void:
-	selected_act = GameManager.current_act
-	btn_act1.pressed.connect(func(): _switch_act(1))
-	btn_act2.pressed.connect(func(): _switch_act(2))
-	btn_back.pressed.connect(_on_btn_back_pressed)
-	
-	_update_ui()
+	hint_label.visible = false
+	act_label.text = "ACT %d" % GameManager.current_act
 
-func _switch_act(act: int) -> void:
-	selected_act = act
-	_update_ui()
+	# Sambungkan sinyal semua gerbang
+	for gate in $Gates.get_children():
+		gate.body_entered.connect(_on_gate_entered.bind(gate))
+		gate.body_exited.connect(_on_gate_exited.bind(gate))
+		_update_gate_visual(gate)
 
-func _update_ui() -> void:
-	if selected_act == 1:
-		lbl_act_title.text = "ACT 1: Lost On The Fire (Hilang Dalam Lalapan Api)"
+
+func _physics_process(_delta: float) -> void:
+	# ── Gerakan karakter (WASD / Arrow Keys) ──
+	var direction := Vector2.ZERO
+	if Input.is_action_pressed("ui_right"): direction.x += 1
+	if Input.is_action_pressed("ui_left"):  direction.x -= 1
+	if Input.is_action_pressed("ui_down"):  direction.y += 1
+	if Input.is_action_pressed("ui_up"):    direction.y -= 1
+
+	player.velocity = direction.normalized() * SPEED
+	player.move_and_slide()
+
+	# Hint label mengikuti posisi player
+	if hint_label.visible:
+		hint_label.global_position = player.global_position + Vector2(-50, -44)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	# Tekan E / Space / Enter untuk masuk gerbang
+	if event.is_action_pressed("ui_accept") and current_gate != null:
+		_enter_gate(current_gate)
+
+
+# ─────────────────────────────────────────────
+#  GATE LOGIC
+# ─────────────────────────────────────────────
+
+func _on_gate_entered(body: Node, gate: Node) -> void:
+	if body != player:
+		return
+	current_gate = gate
+	var is_locked: bool = gate.get_meta("locked", false)
+	if is_locked:
+		hint_label.text = "🔒 Terkunci"
 	else:
-		lbl_act_title.text = "ACT 2: Hunt the Flame (Mengejar Sang Pembakar)"
-		
-	# Update deck summary label
-	lbl_deck_summary.text = "Deck Active (%d kartu): %s" % [GameManager.player_deck.size(), ", ".join(GameManager.player_deck)]
-	
-	# Render level buttons
-	for child in container_levels.get_children():
-		child.queue_free()
-		
-	var max_levels = 4 if selected_act == 1 else 8
-	var max_unlocked = GameManager.act1_max_level_unlocked if selected_act == 1 else GameManager.act2_max_level_unlocked
-	
-	for i in range(1, max_levels + 1):
-		var btn = Button.new()
-		btn.custom_minimum_size = Vector2(130, 130)
-		var is_unlocked = (i <= max_unlocked)
-		var level_num = i
-		
-		var title_text = ""
-		if selected_act == 1 and level_num == 4:
-			title_text = "Level %d\n[ BOSS ]" % level_num
-		elif selected_act == 2 and (level_num == 4 or level_num == 8):
-			title_text = "Level %d\n[ BOSS ]" % level_num
-		elif level_num == 1:
-			title_text = "Level %d\n(Tutorial)" % level_num
-		else:
-			title_text = "Level %d" % level_num
-			
-		if not is_unlocked:
-			btn.disabled = true
-			btn.text = title_text + "\n🔒 Terkunci"
-		else:
-			btn.disabled = false
-			btn.text = title_text + "\n▶ Main"
-			btn.pressed.connect(_start_level.bind(level_num))
-			
-		container_levels.add_child(btn)
+		hint_label.text = "[E] %s" % gate.get_meta("label", "Masuk")
+	hint_label.visible = true
 
-func _start_level(level_num: int) -> void:
-	GameManager.current_act = selected_act
-	GameManager.current_level = level_num
-	GameManager.load_scene("res://scenes/battle/battle_scene.tscn")
 
-func _on_btn_back_pressed() -> void:
-	GameManager.load_scene("res://scenes/main_menu/main_menu.tscn")
+func _on_gate_exited(body: Node, gate: Node) -> void:
+	if body != player:
+		return
+	if current_gate == gate:
+		current_gate = null
+		hint_label.visible = false
+
+
+func _enter_gate(gate: Node) -> void:
+	if gate.get_meta("locked", false):
+		return
+
+	match gate.get_meta("action", ""):
+		"battle":
+			GameManager.current_act   = gate.get_meta("act",   1)
+			GameManager.current_level = gate.get_meta("level", 1)
+			GameManager.load_scene("res://scenes/battle/battle_scene.tscn")
+
+		"main_menu":
+			GameManager.load_scene("res://scenes/main_menu/main_menu.tscn")
+
+		"save":
+			var slot := StoryData.active_save_slot if StoryData.active_save_slot > 0 else 1
+			SaveManager.save_game(slot)
+			hint_label.text = "✅ Game Tersimpan!"
+			await get_tree().create_timer(2.0).timeout
+			if current_gate != null:
+				hint_label.text = "[E] %s" % current_gate.get_meta("label", "Masuk")
+
+		_:
+			push_warning("Gate action tidak dikenal: %s" % gate.get_meta("action", ""))
+
+
+func _update_gate_visual(gate: Node) -> void:
+	var action: String = gate.get_meta("action", "")
+	var locked := false
+
+	if action == "battle":
+		var req_act:   int = gate.get_meta("act",   1)
+		var req_level: int = gate.get_meta("level", 1)
+		if req_act == 1:
+			locked = req_level > GameManager.act1_max_level_unlocked
+		elif req_act == 2:
+			locked = req_level > GameManager.act2_max_level_unlocked
+
+	gate.set_meta("locked", locked)
+
+	# Ubah warna kotak gerbang: abu-abu = terkunci, kuning = terbuka
+	var sprite := gate.get_node_or_null("Sprite")
+	if sprite is ColorRect:
+		sprite.color = Color(0.35, 0.35, 0.35) if locked else Color(1.0, 0.78, 0.0)
