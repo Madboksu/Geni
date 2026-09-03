@@ -1,6 +1,7 @@
 extends Control
 
 signal card_clicked(card_ui)
+signal card_inspect_requested(card_data)
 
 @export var card_data: CardData
 
@@ -21,6 +22,7 @@ func setup(p_card_data: CardData) -> void:
 	_update_ui()
 
 func _ready() -> void:
+	pivot_offset = Vector2(custom_minimum_size.x * 0.5, custom_minimum_size.y * 0.5)
 	if card_data:
 		_update_ui()
 
@@ -56,12 +58,9 @@ func _update_ui() -> void:
 		CardData.CardType.ATTACK:
 			style_box.bg_color = Color("#2a1215")
 			style_box.border_color = Color("#ef4444")
-		# ... (Biarkan pengaturan warna CardType lainnya tetap sama) ...
 		
-	# LOGIKA PENTING: Jika ada gambar, buat warna background panel jadi tembus pandang
 	if has_image:
-		style_box.bg_color.a = 0.0 # Alpha 0 = Transparan
-		# (Opsional) Hapus garis pinggir jika gambar pixel-mu sudah punya garis pinggir sendiri:
+		style_box.bg_color.a = 0.0
 		style_box.border_width_left = 0
 		style_box.border_width_top = 0
 		style_box.border_width_right = 0
@@ -69,37 +68,38 @@ func _update_ui() -> void:
 			
 	panel.add_theme_stylebox_override("panel", style_box)
 
-# Tambahkan fungsi ini di bagian bawah script-mu
 func _format_description(raw_text: String) -> String:
 	var formatted = raw_text
-	formatted = formatted.replace("[Wet]", "[color=#00ffff][Wet][/color]")
-	formatted = formatted.replace("[Muddy]", "[color=#d2691e][Muddy][/color]")
-	formatted = formatted.replace("[Stun]", "[color=#ffff00][Stun][/color]")
-	
-	# Bungkus hasil akhirnya dengan tag [center]
+	formatted = formatted.replace("[Wet]", "[color=#38bdf8][Wet][/color]")
+	formatted = formatted.replace("[Muddy]", "[color=#fb923c][Muddy][/color]")
+	formatted = formatted.replace("[Stun]", "[color=#facc15][Stun][/color]")
 	return "[center]" + formatted + "[/center]"
 
 func _on_gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		card_clicked.emit(self)
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			card_clicked.emit(self)
+		elif event.button_index == MOUSE_BUTTON_RIGHT:
+			card_inspect_requested.emit(card_data)
+			accept_event()
 
 func _on_mouse_entered() -> void:
 	is_hovered = true
 	var tween = create_tween()
-	tween.tween_property(self, "position:y", -12.0, 0.1)
+	tween.tween_property(self, "position:y", -14.0, 0.1)
 
 func _on_mouse_exited() -> void:
 	is_hovered = false
 	var tween = create_tween()
 	tween.tween_property(self, "position:y", 0.0, 0.1)
 
-func _get_drag_data(at_position: Vector2) -> Variant:
+func _get_drag_data(_at_position: Vector2) -> Variant:
 	if not card_data:
 		return null
 		
 	var preview_ui = preload("res://scenes/battle/components/card_ui.tscn").instantiate()
 	preview_ui.setup(card_data)
-	preview_ui.modulate.a = 0.5
+	preview_ui.modulate.a = 0.6
 	var control = Control.new()
 	control.add_child(preview_ui)
 	preview_ui.position = -custom_minimum_size / 2.0

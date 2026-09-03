@@ -1,9 +1,61 @@
-[gd_scene format=3 uid="uid://dtsxwtecyvwyy"]
+[gd_scene load_steps=10 format=3 uid="uid://dtsxwtecyvwyy"]
 
 [ext_resource type="Script" uid="uid://saxp3gohagj5" path="res://scenes/battle/battle_scene.gd" id="1_battle_scene"]
-[ext_resource type="PackedScene" path="res://scenes/battle/components/reward_popup.tscn" id="2_reward_popup"]
+[ext_resource type="Texture2D" uid="uid://c68hyh2kig3no" path="res://assets/background/bg-fight.png" id="2_bg"]
+[ext_resource type="PackedScene" path="res://scenes/battle/components/reward_popup.tscn" id="3_reward_popup"]
+[ext_resource type="FontFile" path="res://assets/card/PublicPixel.ttf" id="4_font"]
 
-[node name="BattleScene" type="Control" unique_id=1322881196]
+[sub_resource type="StyleBoxFlat" id="HudCard_style"]
+bg_color = Color(0.06, 0.06, 0.08, 0.75)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.85, 0.85, 0.9, 0.3)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="HpBar_fill"]
+bg_color = Color(0.85, 0.2, 0.2, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="HpBar_bg"]
+bg_color = Color(0.15, 0.15, 0.18, 0.8)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="BtnExecute_normal"]
+bg_color = Color(0.7, 0.25, 0.05, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.75, 0.2, 0.9)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="BtnExecute_hover"]
+bg_color = Color(0.9, 0.35, 0.08, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.9, 0.4, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="BattleScene" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,131 +64,260 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_battle_scene")
 
-[node name="Background" type="ColorRect" parent="." unique_id=1779518337]
+[node name="Background" type="TextureRect" parent="."]
+z_index = -100
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.08, 0.06, 0.1, 1)
+mouse_filter = 2
+texture = ExtResource("2_bg")
+expand_mode = 1
+stretch_mode = 6
 
-[node name="VBoxMain" type="VBoxContainer" parent="." unique_id=1450855905]
+[node name="Arena" type="CenterContainer" parent="."]
+z_index = -99
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 
-[node name="TopBar" type="MarginContainer" parent="VBoxMain" unique_id=2043766450]
+[node name="ContainerEnemies" type="HBoxContainer" parent="Arena"]
+unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/margin_left = 16
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 40
+alignment = 1
+
+[node name="TopHUD" type="MarginContainer" parent="."]
+z_index = 10
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 90.0
+grow_horizontal = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 20
+
+[node name="HBoxHUD" type="HBoxContainer" parent="TopHUD"]
+layout_mode = 2
+
+[node name="PlayerHUD" type="PanelContainer" parent="TopHUD/HBoxHUD"]
+custom_minimum_size = Vector2(260, 76)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_styles/panel = SubResource("HudCard_style")
+
+[node name="Margin" type="MarginContainer" parent="TopHUD/HBoxHUD/PlayerHUD"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 16
+theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 8
 
-[node name="HBox" type="HBoxContainer" parent="VBoxMain/TopBar" unique_id=1259820239]
+[node name="VBox" type="VBoxContainer" parent="TopHUD/HBoxHUD/PlayerHUD/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="TopRow" type="HBoxContainer" parent="TopHUD/HBoxHUD/PlayerHUD/Margin/VBox"]
 layout_mode = 2
 
-[node name="LblEnergy" type="Label" parent="VBoxMain/TopBar/HBox" unique_id=1200658548]
+[node name="LblPlayerName" type="Label" parent="TopHUD/HBoxHUD/PlayerHUD/Margin/VBox/TopRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 9
+text = "PEMAIN"
+
+[node name="LblEnergy" type="Label" parent="TopHUD/HBoxHUD/PlayerHUD/Margin/VBox/TopRow"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.9, 0.8, 0.2, 1)
-theme_override_font_sizes/font_size = 18
-text = "Energy: 3 / 3"
+size_flags_horizontal = 10
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 10
+text = "ENERGY: 3/3"
 
-[node name="VSeparator" type="VSeparator" parent="VBoxMain/TopBar/HBox" unique_id=1798829766]
+[node name="HpBox" type="HBoxContainer" parent="TopHUD/HBoxHUD/PlayerHUD/Margin/VBox"]
 layout_mode = 2
+theme_override_constants/separation = 8
 
-[node name="LblBattleLog" type="Label" parent="VBoxMain/TopBar/HBox" unique_id=1355635156]
+[node name="PlayerHpBar" type="ProgressBar" parent="TopHUD/HBoxHUD/PlayerHUD/Margin/VBox/HpBox"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
-theme_override_font_sizes/font_size = 13
-text = "Fase Perencanaan: Susun kartu di slot antrean."
+size_flags_vertical = 4
+theme_override_styles/background = SubResource("HpBar_bg")
+theme_override_styles/fill = SubResource("HpBar_fill")
+max_value = 50.0
+value = 50.0
+show_percentage = false
 
-[node name="Arena" type="HBoxContainer" parent="VBoxMain" unique_id=1783813577]
-layout_mode = 2
-size_flags_vertical = 3
-alignment = 1
-
-[node name="ContainerPlayer" type="CenterContainer" parent="VBoxMain/Arena" unique_id=984032632]
+[node name="LblPlayerHp" type="Label" parent="TopHUD/HBoxHUD/PlayerHUD/Margin/VBox/HpBox"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 8
+text = "50/50"
+
+[node name="BottomRow" type="HBoxContainer" parent="TopHUD/HBoxHUD/PlayerHUD/Margin/VBox"]
 layout_mode = 2
 
-[node name="VSeparator" type="VSeparator" parent="VBoxMain/Arena" unique_id=284569262]
-layout_mode = 2
-
-[node name="ContainerEnemies" type="HBoxContainer" parent="VBoxMain/Arena" unique_id=1960836196]
+[node name="LblPlayerBlock" type="Label" parent="TopHUD/HBoxHUD/PlayerHUD/Margin/VBox/BottomRow"]
 unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.75, 1, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 8
+text = "Block: 0"
+
+[node name="PlayerStatus" type="HBoxContainer" parent="TopHUD/HBoxHUD/PlayerHUD/Margin/VBox/BottomRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="CenterBox" type="VBoxContainer" parent="TopHUD/HBoxHUD"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 20
-alignment = 1
+alignment = 0
 
-[node name="QueueSection" type="PanelContainer" parent="VBoxMain" unique_id=1182419316]
-custom_minimum_size = Vector2(0, 80)
+[node name="LblBattleLog" type="Label" parent="TopHUD/HBoxHUD/CenterBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 0.9)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 9
+text = "Fase Perencanaan: Tarik kartu ke musuh."
+horizontal_alignment = 1
+
+[node name="BossHUD" type="PanelContainer" parent="TopHUD/HBoxHUD"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 76)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_styles/panel = SubResource("HudCard_style")
+
+[node name="Margin" type="MarginContainer" parent="TopHUD/HBoxHUD/BossHUD"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 8
+
+[node name="VBox" type="VBoxContainer" parent="TopHUD/HBoxHUD/BossHUD/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="TopRow" type="HBoxContainer" parent="TopHUD/HBoxHUD/BossHUD/Margin/VBox"]
 layout_mode = 2
 
-[node name="Margin" type="MarginContainer" parent="VBoxMain/QueueSection" unique_id=113341584]
+[node name="LblBossName" type="Label" parent="TopHUD/HBoxHUD/BossHUD/Margin/VBox/TopRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.4, 0.4, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 9
+text = "Tree Grunt"
+
+[node name="BossStatus" type="HBoxContainer" parent="TopHUD/HBoxHUD/BossHUD/Margin/VBox/TopRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="HpBox" type="HBoxContainer" parent="TopHUD/HBoxHUD/BossHUD/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BossHpBar" type="ProgressBar" parent="TopHUD/HBoxHUD/BossHUD/Margin/VBox/HpBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_styles/background = SubResource("HpBar_bg")
+theme_override_styles/fill = SubResource("HpBar_fill")
+max_value = 50.0
+value = 50.0
+show_percentage = false
+
+[node name="LblBossHp" type="Label" parent="TopHUD/HBoxHUD/BossHUD/Margin/VBox/HpBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 8
+text = "50/50"
+
+[node name="BottomRow" type="HBoxContainer" parent="TopHUD/HBoxHUD/BossHUD/Margin/VBox"]
+layout_mode = 2
+
+[node name="LblBossBlock" type="Label" parent="TopHUD/HBoxHUD/BossHUD/Margin/VBox/BottomRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.75, 1, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 8
+text = "Block: 0"
+
+[node name="BtnExecute" type="Button" parent="."]
+unique_name_in_owner = true
+z_index = 5
+custom_minimum_size = Vector2(160, 42)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -180.0
+offset_top = -315.0
+offset_right = -20.0
+offset_bottom = -273.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 0.95, 0.8, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("BtnExecute_normal")
+theme_override_styles/hover = SubResource("BtnExecute_hover")
+theme_override_styles/pressed = SubResource("BtnExecute_hover")
+text = "AKHIRI GILIRAN"
+
+[node name="HandSection" type="PanelContainer" parent="."]
+z_index = 0
+custom_minimum_size = Vector2(0, 260)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -262.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Margin" type="MarginContainer" parent="HandSection"]
 layout_mode = 2
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 6
 theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 6
-
-[node name="HBox" type="HBoxContainer" parent="VBoxMain/QueueSection/Margin" unique_id=510633027]
-layout_mode = 2
-theme_override_constants/separation = 20
-alignment = 1
-
-[node name="QueueLabelBox" type="VBoxContainer" parent="VBoxMain/QueueSection/Margin/HBox" unique_id=370114082]
-layout_mode = 2
-alignment = 1
-
-[node name="Label" type="Label" parent="VBoxMain/QueueSection/Margin/HBox/QueueLabelBox" unique_id=729314406]
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "TURN ACTIONS"
-
-[node name="BtnExecute" type="Button" parent="VBoxMain/QueueSection/Margin/HBox/QueueLabelBox" unique_id=1135309265]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 45)
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.9, 0.4, 1)
-theme_override_font_sizes/font_size = 14
-text = "AKHIRI GILIRAN"
-
-[node name="VSeparator" type="VSeparator" parent="VBoxMain/QueueSection/Margin/HBox" unique_id=331934985]
-layout_mode = 2
-
-[node name="ContainerQueue" type="HBoxContainer" parent="VBoxMain/QueueSection/Margin/HBox" unique_id=371980052]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 12
-alignment = 1
-
-[node name="HandSection" type="PanelContainer" parent="VBoxMain" unique_id=416147588]
-custom_minimum_size = Vector2(0, 200)
-layout_mode = 2
-
-[node name="Margin" type="MarginContainer" parent="VBoxMain/HandSection" unique_id=941408243]
-layout_mode = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="ScrollHand" type="ScrollContainer" parent="VBoxMain/HandSection/Margin" unique_id=911907919]
+[node name="ScrollHand" type="ScrollContainer" parent="HandSection/Margin"]
 layout_mode = 2
 vertical_scroll_mode = 0
 
-[node name="ContainerHand" type="HBoxContainer" parent="VBoxMain/HandSection/Margin/ScrollHand" unique_id=313877508]
+[node name="ContainerHand" type="HBoxContainer" parent="HandSection/Margin/ScrollHand"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -144,42 +325,84 @@ size_flags_vertical = 3
 theme_override_constants/separation = 12
 alignment = 1
 
-[node name="RewardPopup" parent="." unique_id=117438772 instance=ExtResource("2_reward_popup")]
+[node name="ZoomOverlay" type="Control" parent="."]
 unique_name_in_owner = true
 visible = false
+z_index = 100
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DimBackdrop" type="ColorRect" parent="ZoomOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+color = Color(0, 0, 0, 0.5)
+
+[node name="CenterBox" type="CenterContainer" parent="ZoomOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ZoomCardHolder" type="Control" parent="ZoomOverlay/CenterBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 240)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="RewardPopup" parent="." instance=ExtResource("3_reward_popup")]
+unique_name_in_owner = true
+visible = false
+z_index = 20
 layout_mode = 1
 
-[node name="WinLossPanel" type="PanelContainer" parent="." unique_id=2034924321]
+[node name="WinLossPanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
 visible = false
-custom_minimum_size = Vector2(350, 200)
+z_index = 20
+custom_minimum_size = Vector2(360, 200)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -175.0
+offset_left = -180.0
 offset_top = -100.0
-offset_right = 175.0
+offset_right = 180.0
+offset_bottom = 100.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBox" type="VBoxContainer" parent="WinLossPanel" unique_id=1895909571]
+[node name="VBox" type="VBoxContainer" parent="WinLossPanel"]
 layout_mode = 2
 theme_override_constants/separation = 16
 alignment = 1
 
-[node name="LblWinLossTitle" type="Label" parent="WinLossPanel/VBox" unique_id=1506338702]
+[node name="LblWinLossTitle" type="Label" parent="WinLossPanel/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 18
 text = "VICTORY!"
 horizontal_alignment = 1
 
-[node name="BtnContinue" type="Button" parent="WinLossPanel/VBox" unique_id=1890523559]
+[node name="BtnContinue" type="Button" parent="WinLossPanel/VBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 40)
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 11
 text = "Lanjutkan"

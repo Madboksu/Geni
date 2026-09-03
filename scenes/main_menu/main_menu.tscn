@@ -1,10 +1,59 @@
-[gd_scene load_steps=4 format=3 uid="uid://buks834s1yido"]
+[gd_scene format=3 uid="uid://buks834s1yido"]
 
 [ext_resource type="Script" uid="uid://xhx7yd5xjnhx" path="res://scenes/main_menu/main_menu.gd" id="1_main_menu"]
-[ext_resource type="Texture2D" path="res://assets/background/bg-startmenu.png" id="2_bg"]
-[ext_resource type="FontFile" path="res://assets/card/PublicPixel.ttf" id="3_font"]
+[ext_resource type="Texture2D" uid="uid://dsmsgvqvnqop0" path="res://assets/background/bg-startmenu.png" id="2_bg"]
+[ext_resource type="Texture2D" uid="uid://urk0omwfj1q6" path="res://assets/titile.png" id="3_title"]
+[ext_resource type="Texture2D" uid="uid://1l680sc1obhu" path="res://assets/gray-button.png" id="4_btn_gray"]
+[ext_resource type="Texture2D" uid="uid://c6g1vxbiwcylo" path="res://assets/gold-button.png" id="5_btn_gold"]
+[ext_resource type="Texture2D" uid="uid://bbss0l8ttm0ms" path="res://assets/settings-button.png" id="6_btn_settings"]
+[ext_resource type="FontFile" uid="uid://6g8f2q64fk0u" path="res://assets/card/PublicPixel.ttf" id="7_font"]
+[ext_resource type="Texture2D" uid="uid://e6ny04rc2hot" path="res://assets/black_box.png" id="8_black_box"]
 
-[node name="MainMenu" type="Control"]
+[sub_resource type="StyleBoxTexture" id="BtnStyle_normal"]
+texture = ExtResource("4_btn_gray")
+
+[sub_resource type="StyleBoxTexture" id="BtnStyle_hover"]
+texture = ExtResource("5_btn_gold")
+
+[sub_resource type="StyleBoxEmpty" id="BtnStyle_focus"]
+
+[sub_resource type="StyleBoxTexture" id="SettingsBtn_normal"]
+texture = ExtResource("6_btn_settings")
+
+[sub_resource type="StyleBoxTexture" id="PopupCard_style"]
+texture = ExtResource("8_black_box")
+texture_margin_left = 32.0
+texture_margin_top = 32.0
+texture_margin_right = 32.0
+texture_margin_bottom = 32.0
+
+[sub_resource type="StyleBoxFlat" id="Slot_saved_style"]
+bg_color = Color(0.24, 0.08, 0.08, 0.88)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.6, 0.22, 0.22, 0.75)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxEmpty" id="StyleBox_transparent"]
+
+[sub_resource type="StyleBoxFlat" id="Slot_empty_style"]
+bg_color = Color(0.12, 0.12, 0.14, 0.88)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.38, 0.38, 0.42, 0.55)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="MainMenu" type="Control" unique_id=1968182103]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,7 +62,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_main_menu")
 
-[node name="BG" type="TextureRect" parent="."]
+[node name="BG" type="TextureRect" parent="." unique_id=2097439353]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -24,229 +73,487 @@ texture = ExtResource("2_bg")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Overlay" type="ColorRect" parent="."]
+[node name="TitleImage" type="TextureRect" parent="." unique_id=593961823]
+unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -254.0
+offset_top = 18.0
+offset_right = 254.0
+offset_bottom = 213.0
+grow_horizontal = 2
+texture = ExtResource("3_title")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BtnGroup" type="VBoxContainer" parent="." unique_id=729385725]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -198.0
+offset_top = -121.0
+offset_right = 198.0
+offset_bottom = 289.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.35)
+theme_override_constants/separation = 10
+alignment = 1
 
-[node name="Center" type="CenterContainer" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBox" type="VBoxContainer" parent="Center"]
-custom_minimum_size = Vector2(280, 0)
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="GameTitle" type="Label" parent="Center/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0.8, 0.2, 0.0, 1)
-theme_override_constants/shadow_offset_x = 3
-theme_override_constants/shadow_offset_y = 3
-theme_override_font_sizes/font_size = 52
-theme_override_fonts/font = ExtResource("3_font")
-text = "GENI"
-horizontal_alignment = 1
-
-[node name="Subtitle" type="Label" parent="Center/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
-theme_override_font_sizes/font_size = 13
-text = "Api mereka, api pembalasan kita"
-horizontal_alignment = 1
-
-[node name="Spacer" type="Control" parent="Center/VBox"]
-custom_minimum_size = Vector2(0, 28)
-layout_mode = 2
-
-[node name="MenuButtons" type="VBoxContainer" parent="Center/VBox"]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="BtnContinue" type="Button" parent="Center/VBox/MenuButtons"]
+[node name="BtnPlay" type="Button" parent="BtnGroup" unique_id=811895191]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(280, 40)
+custom_minimum_size = Vector2(396, 128)
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 14
-text = "Lanjutkan Game"
-flat = false
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_pressed_color = Color(0.18, 0.08, 0, 1)
+theme_override_colors/font_hover_color = Color(0.18, 0.08, 0, 1)
+theme_override_fonts/font = ExtResource("7_font")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("BtnStyle_normal")
+theme_override_styles/pressed = SubResource("BtnStyle_hover")
+theme_override_styles/hover = SubResource("BtnStyle_hover")
+theme_override_styles/focus = SubResource("BtnStyle_focus")
+text = "Mulai Bermain"
 
-[node name="BtnNewGame" type="Button" parent="Center/VBox/MenuButtons"]
+[node name="BtnCredit" type="Button" parent="BtnGroup" unique_id=1427110670]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(280, 40)
+custom_minimum_size = Vector2(396, 128)
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 14
-text = "Game Baru"
-
-[node name="BtnCredit" type="Button" parent="Center/VBox/MenuButtons"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(280, 40)
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_pressed_color = Color(0.18, 0.08, 0, 1)
+theme_override_colors/font_hover_color = Color(0.18, 0.08, 0, 1)
+theme_override_fonts/font = ExtResource("7_font")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("BtnStyle_normal")
+theme_override_styles/pressed = SubResource("BtnStyle_hover")
+theme_override_styles/hover = SubResource("BtnStyle_hover")
+theme_override_styles/focus = SubResource("BtnStyle_focus")
 text = "Credit"
 
-[node name="BtnSettings" type="Button" parent="Center/VBox/MenuButtons"]
+[node name="BtnQuit" type="Button" parent="BtnGroup" unique_id=1735669906]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(280, 40)
+custom_minimum_size = Vector2(396, 128)
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 14
-text = "Pengaturan"
-
-[node name="BtnQuit" type="Button" parent="Center/VBox/MenuButtons"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(280, 40)
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_pressed_color = Color(0.18, 0.08, 0, 1)
+theme_override_colors/font_hover_color = Color(0.18, 0.08, 0, 1)
+theme_override_fonts/font = ExtResource("7_font")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("BtnStyle_normal")
+theme_override_styles/pressed = SubResource("BtnStyle_hover")
+theme_override_styles/hover = SubResource("BtnStyle_hover")
+theme_override_styles/focus = SubResource("BtnStyle_focus")
 text = "Keluar"
 
-[node name="VerLabel" type="Label" parent="."]
+[node name="BtnSettings" type="Button" parent="." unique_id=917621875]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 56)
 layout_mode = 1
-anchors_preset = 4
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 28.0
+offset_top = -84.0
+offset_right = 84.0
+offset_bottom = -28.0
+grow_vertical = 0
+theme_override_styles/normal = SubResource("SettingsBtn_normal")
+theme_override_styles/pressed = SubResource("SettingsBtn_normal")
+theme_override_styles/hover = SubResource("SettingsBtn_normal")
+theme_override_styles/focus = SubResource("BtnStyle_focus")
+
+[node name="VerLabel" type="Label" parent="." unique_id=248108455]
+layout_mode = 1
+anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -220.0
-offset_top = -24.0
-offset_right = -8.0
-offset_bottom = -4.0
+offset_left = -260.0
+offset_top = -28.0
+offset_right = -12.0
+offset_bottom = -8.0
 grow_horizontal = 0
 grow_vertical = 0
-theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 0.7)
-theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 0.7)
+theme_override_fonts/font = ExtResource("7_font")
+theme_override_font_sizes/font_size = 8
 text = "VER_1.0_Geni_MocopatStudio"
 horizontal_alignment = 2
 
-[node name="PopupSaves" type="PanelContainer" parent="."]
+[node name="PopupSaves" type="PanelContainer" parent="." unique_id=2122607424]
 unique_name_in_owner = true
 visible = false
-custom_minimum_size = Vector2(360, 280)
+custom_minimum_size = Vector2(520, 440)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -180.0
-offset_top = -140.0
-offset_right = 180.0
-offset_bottom = 140.0
+offset_left = -260.0
+offset_top = -170.0
+offset_right = 260.0
+offset_bottom = 270.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("PopupCard_style")
 
-[node name="Margin" type="MarginContainer" parent="PopupSaves"]
+[node name="Margin" type="MarginContainer" parent="PopupSaves" unique_id=641678230]
 layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 24
 theme_override_constants/margin_bottom = 16
 
-[node name="VBox" type="VBoxContainer" parent="PopupSaves/Margin"]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="Title" type="Label" parent="PopupSaves/Margin/VBox"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 16
-text = "PILIH SLOT SAVE"
-horizontal_alignment = 1
-
-[node name="BtnSaveSlot1" type="Button" parent="PopupSaves/Margin/VBox"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 44)
-layout_mode = 2
-text = "Slot 1"
-autowrap_mode = 3
-
-[node name="BtnSaveSlot2" type="Button" parent="PopupSaves/Margin/VBox"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 44)
-layout_mode = 2
-text = "Slot 2"
-autowrap_mode = 3
-
-[node name="BtnSaveSlot3" type="Button" parent="PopupSaves/Margin/VBox"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 44)
-layout_mode = 2
-text = "Slot 3"
-autowrap_mode = 3
-
-[node name="BtnCloseSaves" type="Button" parent="PopupSaves/Margin/VBox"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(100, 32)
-layout_mode = 2
-size_flags_horizontal = 4
-text = "Tutup"
-
-[node name="PopupCredits" type="PanelContainer" parent="."]
-unique_name_in_owner = true
-visible = false
-custom_minimum_size = Vector2(400, 220)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -110.0
-offset_right = 200.0
-offset_bottom = 110.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Margin" type="MarginContainer" parent="PopupCredits"]
-layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
-
-[node name="VBox" type="VBoxContainer" parent="PopupCredits/Margin"]
+[node name="VBox" type="VBoxContainer" parent="PopupSaves/Margin" unique_id=1474053348]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Title" type="Label" parent="PopupCredits/Margin/VBox"]
+[node name="Title" type="Label" parent="PopupSaves/Margin/VBox" unique_id=2138256233]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_fonts/font = ExtResource("7_font")
+theme_override_font_sizes/font_size = 15
+text = "Pilih slot"
+horizontal_alignment = 1
+
+[node name="SlotsContainer" type="VBoxContainer" parent="PopupSaves/Margin/VBox" unique_id=428047876]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Slot1Panel" type="PanelContainer" parent="PopupSaves/Margin/VBox/SlotsContainer" unique_id=747161284]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 84)
+layout_mode = 2
+theme_override_styles/panel = SubResource("Slot_saved_style")
+
+[node name="Slot1Margin" type="MarginContainer" parent="PopupSaves/Margin/VBox/SlotsContainer/Slot1Panel" unique_id=1181574001]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContent" type="VBoxContainer" parent="PopupSaves/Margin/VBox/SlotsContainer/Slot1Panel/Slot1Margin" unique_id=1147563295]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="TopRow" type="HBoxContainer" parent="PopupSaves/Margin/VBox/SlotsContainer/Slot1Panel/Slot1Margin/VBoxContent" unique_id=445679782]
+layout_mode = 2
+
+[node name="LblSlot1Title" type="Label" parent="PopupSaves/Margin/VBox/SlotsContainer/Slot1Panel/Slot1Margin/VBoxContent/TopRow" unique_id=1967452815]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("7_font")
+theme_override_font_sizes/font_size = 12
+text = "Slot 1"
+
+[node name="CenterEmpty1" type="Label" parent="PopupSaves/Margin/VBox/SlotsContainer/Slot1Panel/Slot1Margin/VBoxContent/TopRow" unique_id=1812348945]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("7_font")
+theme_override_font_sizes/font_size = 12
+text = "New Game"
+horizontal_alignment = 1
+
+[node name="BtnDeleteSlot1" type="Button" parent="PopupSaves/Margin/VBox/SlotsContainer/Slot1Panel/Slot1Margin/VBoxContent/TopRow" unique_id=49287908]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_colors/font_color = Color(1, 0.35, 0.35, 1)
+theme_override_colors/font_hover_color = Color(1, 0.65, 0.65, 1)
+theme_override_fonts/font = ExtResource("7_font")
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBox_transparent")
+theme_override_styles/pressed = SubResource("StyleBox_transparent")
+theme_override_styles/hover = SubResource("StyleBox_transparent")
+theme_override_styles/focus = SubResource("StyleBox_transparent")
+text = "hapus"
+
+[node name="BottomRow1" type="HBoxContainer" parent="PopupSaves/Margin/VBox/SlotsContainer/Slot1Panel/Slot1Margin/VBoxContent" unique_id=844777302]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="LblSlot1LastOpened" type="Label" parent="PopupSaves/Margin/VBox/SlotsContainer/Slot1Panel/Slot1Margin/VBoxContent/BottomRow1" unique_id=2141509857]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
+theme_override_fonts/font = ExtResource("7_font")
+theme_override_font_sizes/font_size = 8
+text = "Last opened at 2026-08-21 12:00"
+
+[node name="LblSlot1Created" type="Label" parent="PopupSaves/Margin/VBox/SlotsContainer/Slot1Panel/Slot1Margin/VBoxContent/BottomRow1" unique_id=1730545993]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_fonts/font = ExtResource("7_font")
+theme_override_font_sizes/font_size = 8
+text = "Created at 2026-07-02 13:26"
+horizontal_alignment = 2
+
+[node name="BtnSlot1Click" type="Button" parent="PopupSaves/Margin/VBox/SlotsContainer/Slot1Panel" unique_id=972903678]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBox_transparent")
+theme_override_styles/pressed = SubResource("StyleBox_transparent")
+theme_override_styles/hover = SubResource("StyleBox_transparent")
+theme_override_styles/focus = SubResource("StyleBox_transparent")
+
+[node name="Slot2Panel" type="PanelContainer" parent="PopupSaves/Margin/VBox/SlotsContainer" unique_id=236813783]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 84)
+layout_mode = 2
+theme_override_styles/panel = SubResource("Slot_empty_style")
+
+[node name="Slot2Margin" type="MarginContainer" parent="PopupSaves/Margin/VBox/SlotsContainer/Slot2Panel" unique_id=573686278]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContent" type="VBoxContainer" parent="PopupSaves/Margin/VBox/SlotsContainer/Slot2Panel/Slot2Margin" unique_id=1661578599]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="TopRow" type="HBoxContainer" parent="PopupSaves/Margin/VBox/SlotsContainer/Slot2Panel/Slot2Margin/VBoxContent" unique_id=2077768628]
+layout_mode = 2
+
+[node name="LblSlot2Title" type="Label" parent="PopupSaves/Margin/VBox/SlotsContainer/Slot2Panel/Slot2Margin/VBoxContent/TopRow" unique_id=1171955212]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("7_font")
+theme_override_font_sizes/font_size = 12
+text = "Slot 2"
+
+[node name="CenterEmpty2" type="Label" parent="PopupSaves/Margin/VBox/SlotsContainer/Slot2Panel/Slot2Margin/VBoxContent/TopRow" unique_id=483027865]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("7_font")
+theme_override_font_sizes/font_size = 12
+text = "New Game"
+horizontal_alignment = 1
+
+[node name="BtnDeleteSlot2" type="Button" parent="PopupSaves/Margin/VBox/SlotsContainer/Slot2Panel/Slot2Margin/VBoxContent/TopRow" unique_id=403195542]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_colors/font_color = Color(1, 0.35, 0.35, 1)
+theme_override_colors/font_hover_color = Color(1, 0.65, 0.65, 1)
+theme_override_fonts/font = ExtResource("7_font")
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBox_transparent")
+theme_override_styles/pressed = SubResource("StyleBox_transparent")
+theme_override_styles/hover = SubResource("StyleBox_transparent")
+theme_override_styles/focus = SubResource("StyleBox_transparent")
+text = "hapus"
+
+[node name="BottomRow2" type="HBoxContainer" parent="PopupSaves/Margin/VBox/SlotsContainer/Slot2Panel/Slot2Margin/VBoxContent" unique_id=1554317105]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="LblSlot2LastOpened" type="Label" parent="PopupSaves/Margin/VBox/SlotsContainer/Slot2Panel/Slot2Margin/VBoxContent/BottomRow2" unique_id=1554035819]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
+theme_override_fonts/font = ExtResource("7_font")
+theme_override_font_sizes/font_size = 8
+text = "Last opened at"
+
+[node name="LblSlot2Created" type="Label" parent="PopupSaves/Margin/VBox/SlotsContainer/Slot2Panel/Slot2Margin/VBoxContent/BottomRow2" unique_id=711509985]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_fonts/font = ExtResource("7_font")
+theme_override_font_sizes/font_size = 8
+text = "Created at"
+horizontal_alignment = 2
+
+[node name="BtnSlot2Click" type="Button" parent="PopupSaves/Margin/VBox/SlotsContainer/Slot2Panel" unique_id=1890882581]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBox_transparent")
+theme_override_styles/pressed = SubResource("StyleBox_transparent")
+theme_override_styles/hover = SubResource("StyleBox_transparent")
+theme_override_styles/focus = SubResource("StyleBox_transparent")
+
+[node name="Slot3Panel" type="PanelContainer" parent="PopupSaves/Margin/VBox/SlotsContainer" unique_id=1372670839]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 84)
+layout_mode = 2
+theme_override_styles/panel = SubResource("Slot_empty_style")
+
+[node name="Slot3Margin" type="MarginContainer" parent="PopupSaves/Margin/VBox/SlotsContainer/Slot3Panel" unique_id=86745223]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContent" type="VBoxContainer" parent="PopupSaves/Margin/VBox/SlotsContainer/Slot3Panel/Slot3Margin" unique_id=2069409924]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="TopRow" type="HBoxContainer" parent="PopupSaves/Margin/VBox/SlotsContainer/Slot3Panel/Slot3Margin/VBoxContent" unique_id=471660874]
+layout_mode = 2
+
+[node name="LblSlot3Title" type="Label" parent="PopupSaves/Margin/VBox/SlotsContainer/Slot3Panel/Slot3Margin/VBoxContent/TopRow" unique_id=343204113]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("7_font")
+theme_override_font_sizes/font_size = 12
+text = "Slot 3"
+
+[node name="CenterEmpty3" type="Label" parent="PopupSaves/Margin/VBox/SlotsContainer/Slot3Panel/Slot3Margin/VBoxContent/TopRow" unique_id=329677431]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("7_font")
+theme_override_font_sizes/font_size = 12
+text = "New Game"
+horizontal_alignment = 1
+
+[node name="BtnDeleteSlot3" type="Button" parent="PopupSaves/Margin/VBox/SlotsContainer/Slot3Panel/Slot3Margin/VBoxContent/TopRow" unique_id=717903386]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_colors/font_color = Color(1, 0.35, 0.35, 1)
+theme_override_colors/font_hover_color = Color(1, 0.65, 0.65, 1)
+theme_override_fonts/font = ExtResource("7_font")
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBox_transparent")
+theme_override_styles/pressed = SubResource("StyleBox_transparent")
+theme_override_styles/hover = SubResource("StyleBox_transparent")
+theme_override_styles/focus = SubResource("StyleBox_transparent")
+text = "hapus"
+
+[node name="BottomRow3" type="HBoxContainer" parent="PopupSaves/Margin/VBox/SlotsContainer/Slot3Panel/Slot3Margin/VBoxContent" unique_id=1741405817]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="LblSlot3LastOpened" type="Label" parent="PopupSaves/Margin/VBox/SlotsContainer/Slot3Panel/Slot3Margin/VBoxContent/BottomRow3" unique_id=1805739464]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
+theme_override_fonts/font = ExtResource("7_font")
+theme_override_font_sizes/font_size = 8
+text = "Last opened at"
+
+[node name="LblSlot3Created" type="Label" parent="PopupSaves/Margin/VBox/SlotsContainer/Slot3Panel/Slot3Margin/VBoxContent/BottomRow3" unique_id=1511882850]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_fonts/font = ExtResource("7_font")
+theme_override_font_sizes/font_size = 8
+text = "Created at"
+horizontal_alignment = 2
+
+[node name="BtnSlot3Click" type="Button" parent="PopupSaves/Margin/VBox/SlotsContainer/Slot3Panel" unique_id=567015834]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBox_transparent")
+theme_override_styles/pressed = SubResource("StyleBox_transparent")
+theme_override_styles/hover = SubResource("StyleBox_transparent")
+theme_override_styles/focus = SubResource("StyleBox_transparent")
+
+[node name="BtnCloseSaves" type="Button" parent="PopupSaves/Margin/VBox" unique_id=1721803481]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 36)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+theme_override_colors/font_hover_color = Color(1, 0.8, 0.2, 1)
+theme_override_fonts/font = ExtResource("7_font")
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBox_transparent")
+theme_override_styles/pressed = SubResource("StyleBox_transparent")
+theme_override_styles/hover = SubResource("StyleBox_transparent")
+theme_override_styles/focus = SubResource("StyleBox_transparent")
+text = "Kembali"
+
+[node name="PopupCredits" type="PanelContainer" parent="." unique_id=643299324]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(420, 240)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -210.0
+offset_top = -120.0
+offset_right = 210.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Margin" type="MarginContainer" parent="PopupCredits" unique_id=1301106768]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBox" type="VBoxContainer" parent="PopupCredits/Margin" unique_id=543778155]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="PopupCredits/Margin/VBox" unique_id=219234283]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("7_font")
+theme_override_font_sizes/font_size = 14
 text = "CREDITS"
 horizontal_alignment = 1
 
-[node name="Content" type="Label" parent="PopupCredits/Margin/VBox"]
+[node name="Content" type="Label" parent="PopupCredits/Margin/VBox" unique_id=1119681986]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_font_sizes/font_size = 12
-text = "Game Design & Concept: Card Game 'GENI'
-Engine: Godot 4.7 (GL Compatibility)
-Development: MocopatStudio
+theme_override_fonts/font = ExtResource("7_font")
+theme_override_font_sizes/font_size = 9
+text = "carolus bramantyo seno maheswara
 
-Terima Kasih Telah Memainkan Game Ini!"
+Game Design & Concept: GENI
+Engine: Godot 4.7 (GL Compatibility)
+Development: MocopatStudio"
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="BtnCloseCredits" type="Button" parent="PopupCredits/Margin/VBox"]
+[node name="BtnCloseCredits" type="Button" parent="PopupCredits/Margin/VBox" unique_id=2143261983]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(100, 32)
+custom_minimum_size = Vector2(100, 36)
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_hover_color = Color(0.18, 0.08, 0, 1)
+theme_override_fonts/font = ExtResource("7_font")
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("BtnStyle_normal")
+theme_override_styles/hover = SubResource("BtnStyle_hover")
 text = "Tutup"
 
-[node name="PopupSettings" type="PanelContainer" parent="."]
+[node name="PopupSettings" type="PanelContainer" parent="." unique_id=494241330]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(360, 200)
@@ -263,35 +570,43 @@ offset_bottom = 100.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Margin" type="MarginContainer" parent="PopupSettings"]
+[node name="Margin" type="MarginContainer" parent="PopupSettings" unique_id=149037249]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="VBox" type="VBoxContainer" parent="PopupSettings/Margin"]
+[node name="VBox" type="VBoxContainer" parent="PopupSettings/Margin" unique_id=1554292159]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Title" type="Label" parent="PopupSettings/Margin/VBox"]
+[node name="Title" type="Label" parent="PopupSettings/Margin/VBox" unique_id=1307045741]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_fonts/font = ExtResource("7_font")
+theme_override_font_sizes/font_size = 13
 text = "PENGATURAN"
 horizontal_alignment = 1
 
-[node name="AudioLabel" type="Label" parent="PopupSettings/Margin/VBox"]
+[node name="AudioLabel" type="Label" parent="PopupSettings/Margin/VBox" unique_id=1820565581]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_fonts/font = ExtResource("7_font")
+theme_override_font_sizes/font_size = 9
 text = "Volume Suara Master: 100%"
 
-[node name="HSlider" type="HSlider" parent="PopupSettings/Margin/VBox"]
+[node name="HSlider" type="HSlider" parent="PopupSettings/Margin/VBox" unique_id=133998776]
 layout_mode = 2
 value = 100.0
 
-[node name="BtnCloseSettings" type="Button" parent="PopupSettings/Margin/VBox"]
+[node name="BtnCloseSettings" type="Button" parent="PopupSettings/Margin/VBox" unique_id=1448249934]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(100, 32)
+custom_minimum_size = Vector2(100, 36)
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_hover_color = Color(0.18, 0.08, 0, 1)
+theme_override_fonts/font = ExtResource("7_font")
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("BtnStyle_normal")
+theme_override_styles/hover = SubResource("BtnStyle_hover")
 text = "Tutup"

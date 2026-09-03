@@ -59,5 +59,16 @@ func unlock_next_level() -> void:
 	if StoryData.active_save_slot > 0:
 		SaveManager.save_game(StoryData.active_save_slot)
 
+func get_max_unlocked_level() -> int:
+	if current_act == 1:
+		return act1_max_level_unlocked
+	elif current_act == 2:
+		return act2_max_level_unlocked
+	return 1
+
+func start_battle(level: int) -> void:
+	current_level = level
+	load_scene("res://scenes/battle/battle_scene.tscn")
+
 func load_scene(scene_path: String) -> void:
 	get_tree().change_scene_to_file(scene_path)

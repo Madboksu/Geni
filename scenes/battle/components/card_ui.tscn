@@ -1,19 +1,19 @@
 [gd_scene format=3 uid="uid://dof60dak2l02n"]
 
 [ext_resource type="Script" uid="uid://jps73wj5mu4c" path="res://scenes/battle/components/card_ui.gd" id="1_card_ui"]
-[ext_resource type="Texture2D" uid="uid://3ssv07g83x5x" path="res://assets/card/Dewblade.png" id="2_3b1wn"]
-[ext_resource type="FontFile" uid="uid://6g8f2q64fk0u" path="res://assets/card/PublicPixel.ttf" id="3_rgeur"]
+[ext_resource type="Texture2D" path="res://assets/card/Dewblade.png" id="2_3b1wn"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gwcng"]
 
 [node name="CardUI" type="Control" unique_id=2116957101]
-custom_minimum_size = Vector2(130, 180)
+custom_minimum_size = Vector2(160, 240)
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_card_ui")
 
 [node name="CardTexture" type="TextureRect" parent="." unique_id=470718032]
 unique_name_in_owner = true
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -90,36 +90,36 @@ vertical_alignment = 1
 [node name="LblTitle" type="Label" parent="." unique_id=698016515]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 17.0
-offset_top = 117.0
-offset_right = 114.0
-offset_bottom = 123.0
+offset_left = 18.0
+offset_top = 150.0
+offset_right = 142.0
+offset_bottom = 170.0
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("3_rgeur")
-theme_override_font_sizes/font_size = 7
+theme_override_colors/font_color = Color(0.12, 0.12, 0.16, 1)
+theme_override_font_sizes/font_size = 11
 text = "Card Title"
 horizontal_alignment = 1
+vertical_alignment = 1
 autowrap_mode = 3
 
 [node name="LblDescription" type="RichTextLabel" parent="." unique_id=435693141]
 unique_name_in_owner = true
+clip_contents = true
 layout_mode = 0
 offset_left = 28.0
-offset_top = 137.0
-offset_right = 104.0
-offset_bottom = 153.0
+offset_top = 180.0
+offset_right = 132.0
+offset_bottom = 214.0
 size_flags_vertical = 3
 mouse_filter = 2
-theme_override_colors/default_color = Color(0, 0, 0, 1)
-theme_override_fonts/normal_font = ExtResource("3_rgeur")
-theme_override_fonts/bold_font = ExtResource("3_rgeur")
-theme_override_fonts/bold_italics_font = ExtResource("3_rgeur")
-theme_override_fonts/italics_font = ExtResource("3_rgeur")
-theme_override_fonts/mono_font = ExtResource("3_rgeur")
-theme_override_font_sizes/normal_font_size = 3
+theme_override_colors/default_color = Color(1, 1, 1, 1)
+theme_override_constants/line_separation = 1
+theme_override_font_sizes/normal_font_size = 8
+theme_override_font_sizes/bold_font_size = 8
 bbcode_enabled = true
 text = "Card effect description goes here."
+scroll_active = false
+autowrap_mode = 2
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]

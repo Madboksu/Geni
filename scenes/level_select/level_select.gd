@@ -1,164 +1,88 @@
-extends Node2D
+extends Control
 
-# ─────────────────────────────────────────────
-#  OVERWORLD LEVEL SELECT
-#  Karakter bisa gerak bebas, masuk gerbang
-#  untuk ke battle scene atau tempat lain.
-# ─────────────────────────────────────────────
+@onready var header_label: Label = %HeaderLabel
+@onready var btn_level1: Button = %BtnLevel1
+@onready var btn_level2: Button = %BtnLevel2
+@onready var btn_level3: Button = %BtnLevel3
+@onready var btn_level4: Button = %BtnLevel4
+@onready var btn_back: Button = %BtnBack
 
-const SPEED := 120.0
+@onready var level1_card: Control = %Level1Card
+@onready var level2_card: Control = %Level2Card
+@onready var level3_card: Control = %Level3Card
+@onready var level4_card: Control = %Level4Card
 
-@onready var player:     CharacterBody2D = $Player
-@onready var hint_label: Label           = $UI/HintLabel
-@onready var act_label:  Label           = $UI/ActLabel
+@onready var box1_tex: TextureRect = %Box1Texture
+@onready var box2_tex: TextureRect = %Box2Texture
+@onready var box3_tex: TextureRect = %Box3Texture
+@onready var box4_tex: TextureRect = %Box4Texture
 
-var current_gate: Area2D = null
-var _transitioning: bool = false
-
+@onready var lbl_level1_status: Label = %LblLevel1Status
+@onready var lbl_level2_status: Label = %LblLevel2Status
+@onready var lbl_level3_status: Label = %LblLevel3Status
+@onready var lbl_level4_status: Label = %LblLevel4Status
 
 func _ready() -> void:
-	hint_label.visible = false
-	act_label.text     = "ACT %d" % GameManager.current_act
+	_update_header()
+	_update_level_states()
 
-	for gate: Area2D in $Gates.get_children():
-		# BUG FIX: set locked state DULU sebelum connect sinyal,
-		# supaya saat body_entered terpicu, meta "locked" sudah ada
-		_update_gate_visual(gate)
-		gate.body_entered.connect(_on_gate_entered.bind(gate))
-		gate.body_exited.connect(_on_gate_exited.bind(gate))
+	btn_level1.pressed.connect(func(): _select_level(1))
+	btn_level2.pressed.connect(func(): _select_level(2))
+	btn_level3.pressed.connect(func(): _select_level(3))
+	btn_level4.pressed.connect(func(): _select_level(4))
+	btn_back.pressed.connect(_on_btn_back_pressed)
+	
+	_setup_hover_effect(btn_level1, level1_card)
+	_setup_hover_effect(btn_level2, level2_card)
+	_setup_hover_effect(btn_level3, level3_card)
+	_setup_hover_effect(btn_level4, level4_card)
 
+func _setup_hover_effect(btn: Button, card: Control) -> void:
+	card.pivot_offset = Vector2(102, 107)
+	btn.mouse_entered.connect(func():
+		if not btn.disabled:
+			var tw = create_tween()
+			tw.tween_property(card, "scale", Vector2(1.06, 1.06), 0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	)
+	btn.mouse_exited.connect(func():
+		var tw = create_tween()
+		tw.tween_property(card, "scale", Vector2(1.0, 1.0), 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	)
 
-func _physics_process(_delta: float) -> void:
-	if _transitioning:
-		player.velocity = Vector2.ZERO
-		return
-
-	var direction := Vector2.ZERO
-	# Arrow Keys
-	if Input.is_action_pressed("ui_right"): direction.x += 1
-	if Input.is_action_pressed("ui_left"):  direction.x -= 1
-	if Input.is_action_pressed("ui_down"):  direction.y += 1
-	if Input.is_action_pressed("ui_up"):    direction.y -= 1
-
-	player.velocity = direction.normalized() * SPEED
-	player.move_and_slide()
-
-	# BUG FIX: hint_label ada di CanvasLayer (screen space).
-	# Gunakan global_position player langsung — CanvasLayer layer=0 pakai
-	# world→screen transform yang sama dengan viewport, jadi tidak perlu konversi manual.
-	if hint_label.visible:
-		hint_label.position = player.global_position + Vector2(-60, -52)
-
-
-func _unhandled_input(event: InputEvent) -> void:
-	if _transitioning:
-		return
-	if event.is_action_pressed("ui_accept") and current_gate != null:
-		_enter_gate(current_gate)
-
-
-# ─────────────────────────────────────────────
-#  GATE LOGIC
-# ─────────────────────────────────────────────
-
-func _on_gate_entered(body: Node, gate: Area2D) -> void:
-	# BUG FIX: hanya CharacterBody2D (player) yang boleh trigger —
-	# StaticBody2D dinding juga ada di collision_layer 1 sehingga bisa masuk sinyal ini
-	if not body is CharacterBody2D:
-		return
-	if body != player:
-		return
-
-	current_gate = gate
-	var locked: bool = gate.get_meta("locked", false)
-	if locked:
-		hint_label.text = "🔒 Terkunci"
-	else:
-		hint_label.text = "[E] %s" % gate.get_meta("label", "Masuk")
-	hint_label.visible = true
-
-
-func _on_gate_exited(body: Node, gate: Area2D) -> void:
-	if not body is CharacterBody2D:
-		return
-	if body != player:
-		return
-	if current_gate == gate:
-		current_gate = null
-		hint_label.visible = false
-		hint_label.text    = "[E] Masuk"  # reset teks default
-
-
-func _enter_gate(gate: Area2D) -> void:
-	if gate.get_meta("locked", false) or _transitioning:
-		return
-	_transitioning = true
-
-	match gate.get_meta("action", ""):
-		"battle":
-			GameManager.current_act   = gate.get_meta("act",   1)
-			GameManager.current_level = gate.get_meta("level", 1)
-			GameManager.load_scene("res://scenes/battle/battle_scene.tscn")
-
-		"main_menu":
-			GameManager.load_scene("res://scenes/main_menu/main_menu.tscn")
-
-		"save":
-			_transitioning = false
-			var slot: int = maxi(StoryData.active_save_slot, 1)
-			SaveManager.save_game(slot)
-			hint_label.text    = "✅ Game Tersimpan!"
-			hint_label.visible = true  # pastikan visible saat konfirmasi
-			await get_tree().create_timer(2.0).timeout
-			# BUG FIX: setelah await, cek apakah player MASIH di gate save ini
-			# (bisa saja player sudah keluar selagi menunggu 2 detik)
-			if is_instance_valid(hint_label):
-				if current_gate != null:
-					hint_label.text = "[E] %s" % current_gate.get_meta("label", "Masuk")
-				else:
-					hint_label.visible = false
-
+func _update_header() -> void:
+	var act_num: int = GameManager.current_act
+	match act_num:
+		1:
+			header_label.text = "ACT 1 - HUTAN MEMBARA"
+		2:
+			header_label.text = "ACT 2 - KOTA TERBAKAR"
+		3:
+			header_label.text = "ACT 3 - PABRIK BARA"
 		_:
-			_transitioning = false
-			push_warning("Gate action tidak dikenal: %s" % gate.get_meta("action", ""))
+			header_label.text = "ACT " + str(act_num) + " - PILIH LEVEL"
 
+func _update_level_states() -> void:
+	var max_unlocked: int = GameManager.get_max_unlocked_level()
 
-# ─────────────────────────────────────────────
-#  VISUAL
-# ─────────────────────────────────────────────
+	_set_level_state(1, 1 <= max_unlocked, box1_tex, lbl_level1_status, btn_level1)
+	_set_level_state(2, 2 <= max_unlocked, box2_tex, lbl_level2_status, btn_level2)
+	_set_level_state(3, 3 <= max_unlocked, box3_tex, lbl_level3_status, btn_level3)
+	_set_level_state(4, 4 <= max_unlocked, box4_tex, lbl_level4_status, btn_level4)
 
-func _update_gate_visual(gate: Area2D) -> void:
-	var action: String = gate.get_meta("action", "")
-	var locked := false
+func _set_level_state(level_num: int, is_unlocked: bool, box_tex: TextureRect, lbl_status: Label, btn: Button) -> void:
+	if is_unlocked:
+		box_tex.modulate = Color(1.0, 1.0, 1.0, 1.0)
+		lbl_status.text = "TERBUKA"
+		lbl_status.add_theme_color_override("font_color", Color(0.1, 0.65, 0.15, 1.0))
+		btn.disabled = false
+	else:
+		box_tex.modulate = Color(0.45, 0.45, 0.5, 0.75)
+		lbl_status.text = "TERKUNCI"
+		lbl_status.add_theme_color_override("font_color", Color(0.85, 0.25, 0.25, 1.0))
+		btn.disabled = true
 
-	if action == "battle":
-		var req_act:   int = gate.get_meta("act",   1)
-		var req_level: int = gate.get_meta("level", 1)
-		if req_act == 1:
-			locked = req_level > GameManager.act1_max_level_unlocked
-		elif req_act == 2:
-			locked = req_level > GameManager.act2_max_level_unlocked
+func _select_level(level: int) -> void:
+	GameManager.start_battle(level)
 
-	gate.set_meta("locked", locked)
-
-	var sprite := gate.get_node_or_null("Sprite")
-	if sprite is ColorRect:
-		if locked:
-			sprite.color = Color(0.30, 0.30, 0.30)
-		else:
-			match action:
-				"battle":
-					var lvl: int = gate.get_meta("level", 1)
-					sprite.color = Color(0.85, 0.15, 0.10) if lvl == 4 else Color(1.0, 0.78, 0.0)
-				"save":
-					sprite.color = Color(0.2, 0.8, 0.5)
-				"main_menu":
-					sprite.color = Color(0.5, 0.5, 0.9)
-
-	# Update label teks gate agar tampilkan status
-	var label_node := gate.get_node_or_null("Label")
-	if label_node is Label:
-		if locked:
-			label_node.modulate = Color(0.5, 0.5, 0.5)  # redup jika terkunci
-		else:
-			label_node.modulate = Color(1, 1, 1)
+func _on_btn_back_pressed() -> void:
+	GameManager.load_scene("res://scenes/act_menu/act_menu.tscn")

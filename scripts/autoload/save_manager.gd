@@ -5,7 +5,26 @@ const SAVE_PATH_FORMAT = "user://save_slot_%d.json"
 func get_save_path(slot: int) -> String:
 	return SAVE_PATH_FORMAT % slot
 
+func get_save_data(slot: int) -> Dictionary:
+	var path = get_save_path(slot)
+	if not FileAccess.file_exists(path):
+		return {}
+	var file = FileAccess.open(path, FileAccess.READ)
+	if file:
+		var content = file.get_as_text()
+		file.close()
+		var json = JSON.new()
+		if json.parse(content) == OK:
+			var data = json.get_data()
+			if data is Dictionary:
+				return data
+	return {}
+
 func save_game(slot: int) -> bool:
+	var existing = get_save_data(slot)
+	var current_time = Time.get_datetime_string_from_system().replace("T", " ")
+	var created_time = existing.get("created_at", current_time)
+
 	var data = {
 		"player_name":    GameManager.player_name,
 		"current_act":    GameManager.current_act,
@@ -15,7 +34,8 @@ func save_game(slot: int) -> bool:
 		"player_max_hp":  GameManager.player_max_hp,
 		"player_hp":      GameManager.player_current_hp,
 		"player_deck":    GameManager.player_deck,
-		"save_time":      Time.get_datetime_string_from_system()
+		"created_at":     created_time,
+		"save_time":      current_time
 	}
 
 	var file = FileAccess.open(get_save_path(slot), FileAccess.WRITE)

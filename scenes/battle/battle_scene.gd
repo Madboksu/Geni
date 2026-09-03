@@ -2,9 +2,7 @@ extends Control
 
 # Scenes & UI References
 @onready var container_enemies: HBoxContainer = %ContainerEnemies
-@onready var container_player: CenterContainer = %ContainerPlayer
 @onready var container_hand: HBoxContainer = %ContainerHand
-@onready var container_queue: HBoxContainer = %ContainerQueue
 @onready var btn_execute: Button = %BtnExecute
 @onready var lbl_energy: Label = %LblEnergy
 @onready var lbl_battle_log: Label = %LblBattleLog
@@ -12,24 +10,38 @@ extends Control
 @onready var win_loss_panel: PanelContainer = %WinLossPanel
 @onready var lbl_win_loss_title: Label = %LblWinLossTitle
 @onready var btn_continue: Button = %BtnContinue
+@onready var zoom_overlay: Control = %ZoomOverlay
+@onready var zoom_card_holder: Control = %ZoomCardHolder
+var zoom_card_instance: Control = null
+
+# Corner HUD References (Pucuk-Pucuk)
+@onready var player_hp_bar: ProgressBar = %PlayerHpBar
+@onready var lbl_player_hp: Label = %LblPlayerHp
+@onready var lbl_player_block: Label = %LblPlayerBlock
+@onready var player_status: HBoxContainer = %PlayerStatus
+
+@onready var boss_hud: PanelContainer = %BossHUD
+@onready var lbl_boss_name: Label = %LblBossName
+@onready var boss_hp_bar: ProgressBar = %BossHpBar
+@onready var lbl_boss_hp: Label = %LblBossHp
+@onready var lbl_boss_block: Label = %LblBossBlock
+@onready var boss_status: HBoxContainer = %BossStatus
 
 # Preloads
 var card_ui_scene = preload("res://scenes/battle/components/card_ui.tscn")
-var queue_slot_ui_scene = preload("res://scenes/battle/components/queue_slot_ui.tscn")
 var entity_ui_scene = preload("res://scenes/battle/components/entity_ui.tscn")
 
 # Preloaded SVG textures
-var avatar_player_tex = preload("res://assets/placeholders/player_avatar.svg")
 var avatar_wolf_tex = preload("res://assets/placeholders/monster_wolf.svg")
 var avatar_golem_tex = preload("res://assets/placeholders/monster_golem.svg")
 var avatar_boss1_tex = preload("res://assets/placeholders/monster_boss1.svg")
 var avatar_boss2_tex = preload("res://assets/placeholders/monster_boss2.svg")
+var anim_tree_grunt = preload("res://assets/monsters/tree_grunt/tree_grunt_frames.tres")
 
 # Battle Data State
 var player_entity: BattleEntity
 var enemy_entities: Array = []
 var enemy_ui_nodes: Array = []
-var player_ui_node: Control
 
 var current_energy: int = 3
 var max_energy: int = 3
@@ -37,7 +49,6 @@ var max_energy: int = 3
 var draw_pile: Array = []
 var hand: Array = [] # CardData objects
 var discard_pile: Array = []
-var queued_cards: Array = [] # CardData objects queued in slots
 
 var target_enemy_index: int = 0
 var is_executing: bool = false
@@ -45,6 +56,8 @@ var is_executing: bool = false
 func _ready() -> void:
 	reward_popup.visible = false
 	win_loss_panel.visible = false
+	zoom_overlay.visible = false
+	zoom_overlay.gui_input.connect(_on_zoom_overlay_gui_input)
 	btn_execute.pressed.connect(_on_btn_execute_pressed)
 	btn_continue.pressed.connect(_on_btn_continue_pressed)
 	reward_popup.reward_selected.connect(_on_reward_selected)
@@ -61,12 +74,10 @@ func _setup_battle() -> void:
 	player_entity.current_hp = GameManager.player_current_hp
 	player_entity.is_player = true
 	
-	for child in container_player.get_children():
-		child.queue_free()
-	player_ui_node = entity_ui_scene.instantiate()
-	container_player.add_child(player_ui_node)
-	player_ui_node.setup(player_entity, avatar_player_tex)
-	player_ui_node.card_dropped_on_me.connect(_on_card_dropped.bind(player_entity))
+	player_entity.hp_changed.connect(_update_player_hud)
+	player_entity.block_changed.connect(_update_player_hud)
+	player_entity.status_changed.connect(_update_player_hud)
+	_update_player_hud()
 	
 	# 2. Setup Enemies based on level
 	enemy_entities.clear()
@@ -85,11 +96,17 @@ func _setup_battle() -> void:
 		
 		var enemy_ui = entity_ui_scene.instantiate()
 		container_enemies.add_child(enemy_ui)
-		enemy_ui.setup(enemy, cfg["texture"])
+		var frames = cfg.get("sprite_frames", null)
+		var tex = cfg.get("texture", null)
+		enemy_ui.setup(enemy, tex, frames)
 		var enemy_idx = i
 		enemy_ui.entity_selected.connect(func(_ui): _select_target_enemy(enemy_idx))
 		enemy_ui.card_dropped_on_me.connect(_on_card_dropped.bind(enemy))
 		enemy_ui_nodes.append(enemy_ui)
+		
+		enemy.hp_changed.connect(_update_boss_hud)
+		enemy.block_changed.connect(_update_boss_hud)
+		enemy.status_changed.connect(_update_boss_hud)
 		
 	if enemy_ui_nodes.size() > 0:
 		_select_target_enemy(0)
@@ -98,31 +115,73 @@ func _setup_battle() -> void:
 	draw_pile = GameManager.player_deck.duplicate()
 	draw_pile.shuffle()
 	discard_pile.clear()
-	
-	# 4. Queue slots removed
-	for child in container_queue.get_children():
-		child.queue_free()
 		
 	_start_player_turn()
+
+func _update_player_hud(_a = null, _b = null) -> void:
+	if not player_entity:
+		return
+	player_hp_bar.max_value = player_entity.max_hp
+	player_hp_bar.value = maxi(player_entity.current_hp, 0)
+	lbl_player_hp.text = "%d/%d" % [maxi(player_entity.current_hp, 0), player_entity.max_hp]
+	lbl_player_block.text = "Block: %d" % player_entity.current_block
+	
+	# Update player status badges
+	for child in player_status.get_children():
+		child.queue_free()
+	if player_entity.is_wet:
+		_add_status_badge(player_status, "[Wet]", Color(0.2, 0.8, 1))
+	if player_entity.is_muddy:
+		_add_status_badge(player_status, "[Muddy]", Color(0.8, 0.6, 0.3))
+	if player_entity.is_stunned:
+		_add_status_badge(player_status, "[Stun]", Color(1, 0.8, 0.2))
+
+func _update_boss_hud(_a = null, _b = null) -> void:
+	if enemy_entities.is_empty() or target_enemy_index >= enemy_entities.size():
+		boss_hud.visible = false
+		return
+		
+	var target: BattleEntity = enemy_entities[target_enemy_index]
+	boss_hud.visible = true
+	lbl_boss_name.text = target.entity_name
+	boss_hp_bar.max_value = target.max_hp
+	boss_hp_bar.value = maxi(target.current_hp, 0)
+	lbl_boss_hp.text = "%d/%d" % [maxi(target.current_hp, 0), target.max_hp]
+	lbl_boss_block.text = "Block: %d" % target.current_block
+	
+	# Update boss status badges
+	for child in boss_status.get_children():
+		child.queue_free()
+	if target.is_wet:
+		_add_status_badge(boss_status, "[Wet]", Color(0.2, 0.8, 1))
+	if target.is_muddy:
+		_add_status_badge(boss_status, "[Muddy]", Color(0.8, 0.6, 0.3))
+	if target.is_stunned:
+		_add_status_badge(boss_status, "[Stun]", Color(1, 0.8, 0.2))
+
+func _add_status_badge(parent: HBoxContainer, text: String, color: Color) -> void:
+	var lbl = Label.new()
+	lbl.text = text
+	lbl.add_theme_color_override("font_color", color)
+	lbl.add_theme_font_size_override("font_size", 8)
+	parent.add_child(lbl)
 
 func _get_level_enemy_config(act: int, level: int) -> Array:
 	if act == 1:
 		match level:
-			1: # Tutorial 3 monsters
+			1: # Level 1: 1 Tree Grunt mendominasi layar
 				return [
-					{"name": "Ember Prowler A", "hp": 18, "texture": avatar_wolf_tex},
-					{"name": "Ember Prowler B", "hp": 18, "texture": avatar_wolf_tex},
-					{"name": "Ember Prowler C", "hp": 18, "texture": avatar_wolf_tex}
+					{"name": "Tree Grunt", "hp": 50, "sprite_frames": anim_tree_grunt}
 				]
 			2:
 				return [
-					{"name": "Pyro Scavenger A", "hp": 25, "texture": avatar_wolf_tex},
-					{"name": "Pyro Scavenger B", "hp": 25, "texture": avatar_wolf_tex}
+					{"name": "Pyro Scavenger", "hp": 30, "texture": avatar_wolf_tex},
+					{"name": "Tree Grunt", "hp": 35, "sprite_frames": anim_tree_grunt}
 				]
 			3:
 				return [
-					{"name": "Flame Guard Golem", "hp": 40, "texture": avatar_golem_tex},
-					{"name": "Ember Prowler", "hp": 20, "texture": avatar_wolf_tex}
+					{"name": "Flame Guard Golem", "hp": 45, "texture": avatar_golem_tex},
+					{"name": "Tree Grunt", "hp": 30, "sprite_frames": anim_tree_grunt}
 				]
 			4: # Boss Fight Act 1
 				return [
@@ -150,18 +209,20 @@ func _select_target_enemy(index: int) -> void:
 	target_enemy_index = index
 	for i in range(enemy_ui_nodes.size()):
 		enemy_ui_nodes[i].set_selected(i == index)
+	_update_boss_hud()
 
 func _start_player_turn() -> void:
 	is_executing = false
 	current_energy = max_energy
 	_update_energy_ui()
 	player_entity.reset_turn()
+	_update_player_hud()
 	
 	# Draw 5 cards
 	_draw_cards(5)
 	_render_hand_ui()
 	btn_execute.disabled = false
-	_log("Giliran Pemain: Tarik dan lepaskan kartu ke target musuh.")
+	_log("Giliran Pemain: Tarik dan mainkan kartu ke musuh.")
 
 func _draw_cards(count: int) -> void:
 	for i in range(count):
@@ -183,9 +244,18 @@ func _render_hand_ui() -> void:
 		var card_ui = card_ui_scene.instantiate()
 		container_hand.add_child(card_ui)
 		card_ui.setup(card_data)
+		card_ui.card_inspect_requested.connect(_show_card_zoom)
 
 func _update_energy_ui() -> void:
-	lbl_energy.text = "Energy: %d / %d" % [current_energy, max_energy]
+	lbl_energy.text = "ENERGY: %d/%d" % [current_energy, max_energy]
+
+func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
+	return data is Dictionary and data.has("card_data") and not enemy_entities.is_empty()
+
+func _drop_data(_at_position: Vector2, data: Variant) -> void:
+	if data is Dictionary and data.has("card_data") and not enemy_entities.is_empty():
+		var target: BattleEntity = enemy_entities[target_enemy_index]
+		_on_card_dropped(data["card_data"], target)
 
 func _on_card_dropped(card_data: CardData, target_entity: BattleEntity) -> void:
 	if is_executing:
@@ -215,7 +285,7 @@ func _on_card_dropped(card_data: CardData, target_entity: BattleEntity) -> void:
 
 func _start_single_execution(card: CardData, target_entity: BattleEntity) -> void:
 	is_executing = true
-	_log("Eksekusi Kartu [%s] pada [%s]" % [card.name, target_entity.entity_name])
+	_log("Eksekusi [%s] pada [%s]" % [card.name, target_entity.entity_name])
 	
 	_execute_card_effect(card, target_entity)
 	
@@ -226,7 +296,7 @@ func _start_single_execution(card: CardData, target_entity: BattleEntity) -> voi
 		_on_battle_victory()
 		return
 		
-	await get_tree().create_timer(0.6).timeout
+	await get_tree().create_timer(0.4).timeout
 	is_executing = false
 
 func _on_btn_execute_pressed() -> void:
@@ -254,11 +324,11 @@ func _execute_card_effect(card: CardData, target: BattleEntity) -> void:
 		
 	if card.self_hp_cost > 0:
 		player_entity.take_damage(card.self_hp_cost)
-		_log("Blood Pact: Pengorbanan 3 HP.")
+		_log("Blood Pact: Pengorbanan %d HP." % card.self_hp_cost)
 	if card.energy_gain > 0:
 		current_energy += card.energy_gain
 		_update_energy_ui()
-		_log("Blood Pact: Mendapatkan +2 Energy!")
+		_log("Blood Pact: Mendapatkan +%d Energy!" % card.energy_gain)
 
 	if card.heal > 0:
 		player_entity.heal(card.heal)
@@ -284,65 +354,76 @@ func _execute_card_effect(card: CardData, target: BattleEntity) -> void:
 					_log("Target terkena efek [Stun]!")
 				if card.combo_block > 0:
 					player_entity.add_block(card.combo_block)
-					_log("Pemain mendapatkan bonus +10 Block!")
+					_log("Pemain mendapatkan bonus +%d Block!" % card.combo_block)
 					
 			elif card.combo_req_status == CardData.StatusType.MUDDY and target.is_muddy:
 				final_damage = card.combo_damage
 				is_combo_triggered = true
 				_log(">>> REAKSI BERANTAI [MUDDY] TERPICU! <<<")
-				
-		# Drought's End Coin Flip Logic
+				if card.combo_block > 0:
+					player_entity.add_block(card.combo_block)
+					_log("Pemain mendapatkan bonus +%d Block!" % card.combo_block)
+		
+		# Coin Flip logic for Ultimate
 		if card.is_coin_flip:
-			if target.is_muddy:
-				final_damage = 45
-				_log("Drought's End: Target [Muddy], Pasti Berhasil 45 Damage!")
+			var success = randf() > 0.5 or (card.combo_req_status == CardData.StatusType.MUDDY and target.is_muddy)
+			if not success:
+				final_damage = card.coin_flip_fail_damage
+				_log("Lempar Koin: GAGAL! Damage berkurang jadi %d." % final_damage)
 			else:
-				var success = (randi() % 2 == 0)
-				if success:
-					final_damage = 45
-					_log("Drought's End: Lempar Koin BERHASIL! (45 Damage)")
-				else:
-					final_damage = card.coin_flip_fail_damage
-					_log("Drought's End: Lempar Koin Gagal (15 Damage).")
-
-		if final_damage > 0:
-			var dealt = target.take_damage(final_damage)
-			_log("%s memberikan %d damage pada %s." % [card.name, dealt, target.entity_name])
-
-		# Apply Primer status
+				_log("Lempar Koin: SUKSES! Full Damage %d!" % final_damage)
+				
+		# Apply status from Primer
 		if card.applies_status == CardData.StatusType.WET:
 			target.apply_status_wet()
-			_log("Target menampung status [Wet]. Siap dipicu oleh kartu Igniter!")
+			_log("Target basah [Wet]!")
 		elif card.applies_status == CardData.StatusType.MUDDY:
 			target.apply_status_muddy()
-			_log("Target menampung status [Muddy]. Siap dipicu oleh kartu Igniter!")
-
-	# Consumable Item Handling (Hancur / removed from active deck)
-	if card.is_consumable:
-		_log("Kartu [%s] hancur (dihapus dari deck) setelah digunakan." % card.name)
-		GameManager.player_deck.erase(card.id)
+			_log("Target berlumpur [Muddy]!")
+			
+		if final_damage > 0:
+			target.take_damage(final_damage)
+			_log("Menyerang %s sebesar %d damage!" % [target.entity_name, final_damage])
+			
+	_update_player_hud()
+	_update_boss_hud()
 
 func _enemy_turn_phase() -> void:
-	_log("=== GILIRAN MUSUH ===")
-	for enemy in enemy_entities:
+	btn_execute.disabled = true
+	_log("=== GILIRAN MUSUH DIMULAI ===")
+	
+	for i in range(enemy_entities.size()):
+		var enemy = enemy_entities[i]
 		if enemy.current_hp <= 0:
 			continue
+			
 		if enemy.is_stunned:
-			_log("%s terkena [Stun] dan tidak dapat bergerak giliran ini!" % enemy.entity_name)
-			enemy.is_stunned = false
-			enemy.status_changed.emit()
+			_log("%s terkena [Stun] dan tidak bisa bergerak!" % enemy.entity_name)
+			enemy.tick_turn()
 			continue
 			
 		enemy.reset_turn()
-		var dmg = randi_range(6, 12)
-		var dealt = player_entity.take_damage(dmg)
-		_log("%s menyerang Pemain sebesar %d damage." % [enemy.entity_name, dealt])
-		await get_tree().create_timer(0.5).timeout
+		
+		# Intent: Attack or Block
+		var action_roll = randf()
+		if action_roll < 0.7:
+			var dmg = randi_range(6, 12)
+			player_entity.take_damage(dmg)
+			_log("%s menyerang Pemain sebesar %d Damage!" % [enemy.entity_name, dmg])
+		else:
+			var blk = randi_range(4, 8)
+			enemy.add_block(blk)
+			_log("%s bertahan dan menambah %d Block!" % [enemy.entity_name, blk])
+			
+		_update_player_hud()
+		_update_boss_hud()
 		
 		if player_entity.current_hp <= 0:
 			_on_battle_defeat()
 			return
 			
+		await get_tree().create_timer(0.6).timeout
+		
 	_start_player_turn()
 
 func _auto_select_alive_target() -> void:
@@ -358,25 +439,25 @@ func _check_all_enemies_dead() -> bool:
 	return true
 
 func _on_battle_victory() -> void:
-	_log("=== KEMENANGAN! SELURUH MUSUH DIKALAHKAN! ===")
+	_log("=== KEMENANGAN! Semua musuh tumbang ===")
 	GameManager.player_current_hp = player_entity.current_hp
-	GameManager.unlock_next_level()
 	
-	await get_tree().create_timer(0.6).timeout
-	# Show Reward Popup with 3 random card options
-	var reward_options = [
-		CardDatabase.get_card("gale_wind"),
-		CardDatabase.get_card("thunder_strike"),
-		CardDatabase.get_card("droughts_end")
-	]
-	reward_popup.setup(reward_options)
-	reward_popup.visible = true
+	# Unlock logic
+	if GameManager.current_act == 1:
+		if GameManager.current_level >= GameManager.act1_max_level_unlocked:
+			GameManager.act1_max_level_unlocked = GameManager.current_level + 1
+	elif GameManager.current_act == 2:
+		if GameManager.current_level >= GameManager.act2_max_level_unlocked:
+			GameManager.act2_max_level_unlocked = GameManager.current_level + 1
+			
+	SaveManager.save_game(StoryData.active_save_slot)
+	
+	lbl_win_loss_title.text = "VICTORY!\nKamu Menang!"
+	reward_popup.show_reward()
 
 func _on_reward_selected(card_id: String) -> void:
 	GameManager.add_card_to_deck(card_id)
-	reward_popup.visible = false
-	
-	lbl_win_loss_title.text = "VICTORY!\nLevel %d Selesai" % GameManager.current_level
+	SaveManager.save_game(StoryData.active_save_slot)
 	win_loss_panel.visible = true
 
 func _on_battle_defeat() -> void:
@@ -386,12 +467,54 @@ func _on_battle_defeat() -> void:
 
 func _on_btn_continue_pressed() -> void:
 	if player_entity.current_hp > 0:
-		# Victory: HP sudah di-save di _on_battle_victory, langsung ke level select
 		GameManager.load_scene("res://scenes/level_select/level_select.tscn")
 	else:
-		# Defeat: reset HP saja, deck dan progress unlock tetap
 		GameManager.reset_run()
 		GameManager.load_scene("res://scenes/level_select/level_select.tscn")
 
 func _log(msg: String) -> void:
 	lbl_battle_log.text = msg
+
+func _show_card_zoom(card_data: CardData) -> void:
+	if not zoom_card_instance:
+		zoom_card_instance = card_ui_scene.instantiate()
+		zoom_card_holder.add_child(zoom_card_instance)
+		zoom_card_instance.position = Vector2.ZERO
+		zoom_card_instance.pivot_offset = Vector2(80, 120)
+		zoom_card_instance.gui_input.connect(func(event: InputEvent):
+			if event is InputEventMouseButton and event.pressed:
+				_hide_card_zoom()
+		)
+		
+	zoom_card_instance.setup(card_data)
+	zoom_overlay.visible = true
+	zoom_card_instance.scale = Vector2(1.0, 1.0)
+	zoom_card_instance.modulate.a = 0.0
+	
+	var tw = create_tween()
+	tw.set_parallel(true)
+	tw.tween_property(zoom_card_instance, "scale", Vector2(2.1, 2.1), 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tw.tween_property(zoom_card_instance, "modulate:a", 1.0, 0.12)
+
+func _hide_card_zoom() -> void:
+	if not zoom_overlay.visible:
+		return
+	if zoom_card_instance:
+		var tw = create_tween()
+		tw.set_parallel(true)
+		tw.tween_property(zoom_card_instance, "scale", Vector2(1.4, 1.4), 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		tw.tween_property(zoom_card_instance, "modulate:a", 0.0, 0.1)
+		tw.chain().tween_callback(func():
+			zoom_overlay.visible = false
+		)
+	else:
+		zoom_overlay.visible = false
+
+func _on_zoom_overlay_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed:
+		_hide_card_zoom()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if zoom_overlay.visible and event is InputEventMouseButton and event.pressed:
+		_hide_card_zoom()
+		get_viewport().set_input_as_handled()

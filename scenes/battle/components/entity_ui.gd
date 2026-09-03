@@ -17,8 +17,12 @@ signal card_dropped_on_me(card_data: CardData)
 @onready var select_border: ReferenceRect = %SelectBorder
 
 var is_selected: bool = false
+var current_sprite_frames: SpriteFrames = null
+var current_frame_idx: int = 0
+var anim_timer: float = 0.0
+var frame_duration: float = 0.166
 
-func setup(p_entity: BattleEntity, avatar_texture: Texture2D = null) -> void:
+func setup(p_entity: BattleEntity, avatar_texture: Texture2D = null, p_sprite_frames: SpriteFrames = null) -> void:
 	# Putuskan sinyal lama jika sebelumnya sudah ada data
 	if entity_data:
 		entity_data.hp_changed.disconnect(_on_hp_changed)
@@ -35,9 +39,28 @@ func setup(p_entity: BattleEntity, avatar_texture: Texture2D = null) -> void:
 	if not is_inside_tree():
 		await ready 
 		
-	if avatar_texture:
+	current_sprite_frames = p_sprite_frames
+	if current_sprite_frames:
+		var speed: float = current_sprite_frames.get_animation_speed("idle")
+		if speed > 0.0:
+			frame_duration = 1.0 / speed
+		current_frame_idx = 0
+		anim_timer = 0.0
+		texture_avatar.texture = current_sprite_frames.get_frame_texture("idle", 0)
+	elif avatar_texture:
+		current_sprite_frames = null
 		texture_avatar.texture = avatar_texture
 	_update_ui()
+
+func _process(delta: float) -> void:
+	if current_sprite_frames:
+		anim_timer += delta
+		if anim_timer >= frame_duration:
+			anim_timer -= frame_duration
+			var count: int = current_sprite_frames.get_frame_count("idle")
+			if count > 0:
+				current_frame_idx = (current_frame_idx + 1) % count
+				texture_avatar.texture = current_sprite_frames.get_frame_texture("idle", current_frame_idx)
 
 func _ready() -> void:
 	_update_ui()
@@ -57,7 +80,7 @@ func _update_ui() -> void:
 
 func set_selected(p_selected: bool) -> void:
 	is_selected = p_selected
-	select_border.visible = is_selected
+	select_border.visible = false
 
 func _on_hp_changed(new_hp: int, max_hp: int) -> void:
 	hp_bar.value = new_hp

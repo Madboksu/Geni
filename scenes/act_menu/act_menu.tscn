@@ -1,0 +1,321 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scenes/act_menu/act_menu.gd" id="1_act_menu"]
+[ext_resource type="Texture2D" path="res://assets/background/bg-startmenu.png" id="2_bg"]
+[ext_resource type="FontFile" path="res://assets/card/PublicPixel.ttf" id="3_font"]
+[ext_resource type="Texture2D" uid="uid://r5dg4fqi4m25" path="res://assets/gerbang-buka.png" id="4_gerbang_buka"]
+[ext_resource type="Texture2D" uid="uid://cnxobjnpb227e" path="res://assets/gerbang-tutup.png" id="5_gerbang_tutup"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBox_transparent"]
+
+[sub_resource type="StyleBoxFlat" id="BtnBack_style"]
+bg_color = Color(0.12, 0.1, 0.14, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.7, 0.5, 0.2, 0.8)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="ActMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_act_menu")
+
+[node name="BG" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_bg")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Overlay" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.55)
+
+[node name="HeaderBox" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -300.0
+offset_top = 25.0
+offset_right = 300.0
+offset_bottom = 90.0
+grow_horizontal = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="HeaderLabel" type="Label" parent="HeaderBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0.85, 0.25, 0, 0.8)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 22
+text = "PILIH GERBANG ACT"
+horizontal_alignment = 1
+
+[node name="SubLabel" type="Label" parent="HeaderBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 0.8)
+theme_override_font_sizes/font_size = 12
+text = "Masuki gerbang untuk memulai ekspedisi"
+horizontal_alignment = 1
+
+[node name="GatesContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -460.0
+offset_top = -220.0
+offset_right = 460.0
+offset_bottom = 210.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 40
+alignment = 1
+
+[node name="Act1Card" type="Control" parent="GatesContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 390)
+layout_mode = 2
+
+[node name="Gate1Texture" type="TextureRect" parent="GatesContainer/Act1Card"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_gerbang_buka")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="InfoBox1" type="VBoxContainer" parent="GatesContainer/Act1Card"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -80.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="LblAct1Num" type="Label" parent="GatesContainer/Act1Card/InfoBox1"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 12
+text = "ACT 1"
+horizontal_alignment = 1
+
+[node name="LblAct1Title" type="Label" parent="GatesContainer/Act1Card/InfoBox1"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 12
+text = "Hutan Membara"
+horizontal_alignment = 1
+
+[node name="LblAct1Status" type="Label" parent="GatesContainer/Act1Card/InfoBox1"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 1, 0.3, 1)
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 8
+text = "TERBUKA"
+horizontal_alignment = 1
+
+[node name="BtnAct1" type="Button" parent="GatesContainer/Act1Card"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBox_transparent")
+theme_override_styles/hover = SubResource("StyleBox_transparent")
+theme_override_styles/pressed = SubResource("StyleBox_transparent")
+theme_override_styles/focus = SubResource("StyleBox_transparent")
+
+[node name="Act2Card" type="Control" parent="GatesContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 390)
+layout_mode = 2
+
+[node name="Gate2Texture" type="TextureRect" parent="GatesContainer/Act2Card"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_gerbang_tutup")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="InfoBox2" type="VBoxContainer" parent="GatesContainer/Act2Card"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -80.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="LblAct2Num" type="Label" parent="GatesContainer/Act2Card/InfoBox2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 12
+text = "ACT 2"
+horizontal_alignment = 1
+
+[node name="LblAct2Title" type="Label" parent="GatesContainer/Act2Card/InfoBox2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 12
+text = "Kota Terbakar"
+horizontal_alignment = 1
+
+[node name="LblAct2Status" type="Label" parent="GatesContainer/Act2Card/InfoBox2"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.3, 0.3, 1)
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 8
+text = "TERKUNCI"
+horizontal_alignment = 1
+
+[node name="BtnAct2" type="Button" parent="GatesContainer/Act2Card"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBox_transparent")
+theme_override_styles/hover = SubResource("StyleBox_transparent")
+theme_override_styles/pressed = SubResource("StyleBox_transparent")
+theme_override_styles/focus = SubResource("StyleBox_transparent")
+
+[node name="Act3Card" type="Control" parent="GatesContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 390)
+layout_mode = 2
+
+[node name="Gate3Texture" type="TextureRect" parent="GatesContainer/Act3Card"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_gerbang_tutup")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="InfoBox3" type="VBoxContainer" parent="GatesContainer/Act3Card"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -80.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="LblAct3Num" type="Label" parent="GatesContainer/Act3Card/InfoBox3"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 12
+text = "ACT 3"
+horizontal_alignment = 1
+
+[node name="LblAct3Title" type="Label" parent="GatesContainer/Act3Card/InfoBox3"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_font_sizes/font_size = 12
+text = "Pabrik Bara"
+horizontal_alignment = 1
+
+[node name="LblAct3Status" type="Label" parent="GatesContainer/Act3Card/InfoBox3"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 8
+text = "SEGERA HADIR"
+horizontal_alignment = 1
+
+[node name="BtnAct3" type="Button" parent="GatesContainer/Act3Card"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBox_transparent")
+theme_override_styles/hover = SubResource("StyleBox_transparent")
+theme_override_styles/pressed = SubResource("StyleBox_transparent")
+theme_override_styles/focus = SubResource("StyleBox_transparent")
+
+[node name="BtnBack" type="Button" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 44)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -120.0
+offset_top = -68.0
+offset_right = 120.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 0.9, 0.7, 1)
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("BtnBack_style")
+text = "KEMBALI KE MENU"
