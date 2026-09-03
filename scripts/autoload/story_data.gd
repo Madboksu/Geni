@@ -1,7 +1,7 @@
 extends Node
 
 var player_name: String = "Banyu"
-var active_save_slot: int = 1
+var active_save_slot: int = 0  # 0 = belum pilih slot
 
 # Story text data
 const WORLD_PREMISE: String = """Dahulu, wilayah Desa Wana Asri merupakan daerah hijau yang dikelilingi hutan hujan lebat. Masyarakat hidup tentram dari hasil pertanian dan ladang. Sungai mengalir jernih, dan hutan menjadi pelindung alami desa.

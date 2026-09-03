@@ -1,7 +1,9 @@
 78098b89c88a74ebe8c20117b8754620
-::res://::1788151137
+::res://::1788438652
 icon.svg::CompressedTexture2D::3037285006081401713::1787891220::1787908462::1::::<><><>0<>0<>bb28a74807ccb6d1b7c4510aee023960<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
-::res://assets/::1788141952
+::res://assets/::1788438858
+::res://assets/background/::1788438944
+bg-startmenu.png::CompressedTexture2D::8448538518925214655::1788438864::1788441623::1::::<><><>0<>0<>678a61ca364102bf5503d5a0bedfce8e<>res://.godot/imported/bg-startmenu.png-9f132f7d5d876289ae849cb343aaef61.ctex::
 ::res://assets/card/::1788141952
 Dewblade.png::CompressedTexture2D::2003578191815116575::1788141952::1788141952::1::::<><><>0<>0<>6b09f58dfab91bdadfd4643334e3d4bc<>res://.godot/imported/Dewblade.png-587252bd09bd8c3827ce839ffa91f782.ctex::
 Gale wind card.png::CompressedTexture2D::7508298532936408251::1788141952::1788141952::1::::<><><>0<>0<>6b72aec6f3985ee049a560ea4d4ed7ff<>res://.godot/imported/Gale wind card.png-095d1031bda68f064270190b71779396.ctex::
@@ -15,7 +17,7 @@ monster_wolf.svg::CompressedTexture2D::542786900995463022::1787906655::178790846
 player_avatar.svg::CompressedTexture2D::2931353481888908445::1787906650::1787908462::1::::<><><>0<>0<>6243c722d5195bee669d9bad5528157b<>res://.godot/imported/player_avatar.svg-384fe234144b6036c466d3aa127d9fc7.ctex::
 ::res://scenes/::1787906783
 ::res://scenes/battle/::1788141952
-battle_scene.gd::GDScript::1264823943794873112::1788141952::0::1::::<>Control<><>0<>0<><>::
+battle_scene.gd::GDScript::1264823943794873112::1788153347::0::1::::<>Control<><>0<>0<><>::
 battle_scene.tscn::PackedScene::8531445662321195784::1788141952::0::1::::<><><>0<>0<><>::uid://saxp3gohagj5::::res://scenes/battle/battle_scene.gd<>res://scenes/battle/components/reward_popup.tscn
 ::res://scenes/battle/components/::1788142471
 card_ui.gd::GDScript::663816815416946956::1788141952::0::1::::<>Control<><>0<>0<><>::
@@ -30,17 +32,17 @@ reward_popup.tscn::PackedScene::-1::1787906733::0::1::::<><><>0<>0<><>::res://sc
 story_cutscene.gd::GDScript::5986879310995686526::1787906760::0::1::::<>Control<><>0<>0<><>::
 story_cutscene.tscn::PackedScene::-1::1787906766::0::1::::<><><>0<>0<><>::res://scenes/cutscene/story_cutscene.gd
 ::res://scenes/level_select/::1788142009
-level_select.gd::GDScript::6680531011595976017::1788141920::0::1::::<>Node2D<><>0<>0<><>::
-level_select.tscn::PackedScene::6966615555321307422::1788142009::0::1::::<><><>0<>0<><>::res://scenes/level_select/level_select.gd
+level_select.gd::GDScript::6680531011595976017::1788154186::0::1::::<>Node2D<><>0<>0<><>::
+level_select.tscn::PackedScene::6966615555321307422::1788153161::0::1::::<><><>0<>0<><>::res://scenes/level_select/level_select.gd
 ::res://scenes/main_menu/::1788141952
-main_menu.gd::GDScript::1630248950780732785::1787906783::0::1::::<>Control<><>0<>0<><>::
-main_menu.tscn::PackedScene::3811994687369671540::1788141952::0::1::::<><><>0<>0<><>::uid://xhx7yd5xjnhx::::res://scenes/main_menu/main_menu.gd
+main_menu.gd::GDScript::1630248950780732785::1788153909::0::1::::<>Control<><>0<>0<><>::
+main_menu.tscn::PackedScene::3811994687369671540::1788438982::0::1::::<><><>0<>0<><>::uid://xhx7yd5xjnhx::::res://scenes/main_menu/main_menu.gd
 ::res://scripts/::1787906623
 ::res://scripts/autoload/::1788141952
 card_database.gd::GDScript::5894421420499003736::1788141952::0::1::::<>Node<><>0<>0<><>::
-game_manager.gd::GDScript::8039708173661083243::1788141952::0::1::::<>Node<><>0<>0<><>::
-save_manager.gd::GDScript::6248031976562246650::1787906640::0::1::::<>Node<><>0<>0<><>::
-story_data.gd::GDScript::4050274923253774907::1787906630::0::1::::<>Node<><>0<>0<><>::
+game_manager.gd::GDScript::8039708173661083243::1788153347::0::1::::<>Node<><>0<>0<><>::
+save_manager.gd::GDScript::6248031976562246650::1788153909::0::1::::<>Node<><>0<>0<><>::
+story_data.gd::GDScript::4050274923253774907::1788153909::0::1::::<>Node<><>0<>0<><>::
 ::res://scripts/models/::1788141952
 battle_entity.gd::GDScript::8450940721621412716::1787906616::0::1::::BattleEntity<>Resource<><>0<>0<><>::
 card_data.gd::GDScript::1308808903535821343::1788141952::0::1::::CardData<>Resource<><>0<>0<><>::
