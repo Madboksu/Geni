@@ -49,7 +49,7 @@ func add_card_to_deck(card_id: String) -> void:
 func unlock_next_level() -> void:
 	if current_act == 1:
 		act1_max_level_unlocked = max(act1_max_level_unlocked, current_level + 1)
-		if act1_max_level_unlocked > 4:
+		if act1_max_level_unlocked > 5:
 			# Act 1 Complete -> Unlock Act 2
 			current_act = 2
 			act2_max_level_unlocked = max(act2_max_level_unlocked, 1)

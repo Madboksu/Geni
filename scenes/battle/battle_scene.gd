@@ -183,7 +183,12 @@ func _get_level_enemy_config(act: int, level: int) -> Array:
 					{"name": "Flame Guard Golem", "hp": 45, "texture": avatar_golem_tex},
 					{"name": "Tree Grunt", "hp": 30, "sprite_frames": anim_tree_grunt}
 				]
-			4: # Boss Fight Act 1
+			4:
+				return [
+					{"name": "Fire Elemental", "hp": 35, "texture": avatar_wolf_tex},
+					{"name": "Flame Guard Golem", "hp": 45, "texture": avatar_golem_tex}
+				]
+			5: # Boss Fight Act 1
 				return [
 					{"name": "Ember Beast (BOSS)", "hp": 85, "texture": avatar_boss1_tex}
 				]

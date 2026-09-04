@@ -30,17 +30,47 @@ func _ready() -> void:
 	_setup_hover_effect(btn_act1, act1_card)
 	_setup_hover_effect(btn_act2, act2_card)
 	_setup_hover_effect(btn_act3, act3_card)
+	_setup_back_button_juice()
+
+func _setup_back_button_juice() -> void:
+	if not is_instance_valid(btn_back):
+		return
+	btn_back.pivot_offset = btn_back.size * 0.5
+	btn_back.mouse_entered.connect(func():
+		var tw = create_tween()
+		tw.tween_property(btn_back, "scale", Vector2(1.06, 1.06), 0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	)
+	btn_back.mouse_exited.connect(func():
+		var tw = create_tween()
+		tw.tween_property(btn_back, "scale", Vector2.ONE, 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	)
+	btn_back.button_down.connect(func():
+		var tw = create_tween()
+		tw.tween_property(btn_back, "scale", Vector2(0.96, 0.96), 0.06).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	)
+	btn_back.button_up.connect(func():
+		var tw = create_tween()
+		tw.tween_property(btn_back, "scale", Vector2(1.06, 1.06), 0.08).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	)
+
+var _card_tweens: Dictionary = {}
 
 func _setup_hover_effect(btn: Button, card: Control) -> void:
 	card.pivot_offset = Vector2(125, 195)
 	btn.mouse_entered.connect(func():
 		if not btn.disabled:
+			if _card_tweens.has(card) and is_instance_valid(_card_tweens[card]):
+				_card_tweens[card].kill()
 			var tw = create_tween()
 			tw.tween_property(card, "scale", Vector2(1.05, 1.05), 0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+			_card_tweens[card] = tw
 	)
 	btn.mouse_exited.connect(func():
+		if _card_tweens.has(card) and is_instance_valid(_card_tweens[card]):
+			_card_tweens[card].kill()
 		var tw = create_tween()
 		tw.tween_property(card, "scale", Vector2(1.0, 1.0), 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		_card_tweens[card] = tw
 	)
 
 func _update_act_states() -> void:
@@ -50,8 +80,8 @@ func _update_act_states() -> void:
 	lbl_act1_status.add_theme_color_override("font_color", Color(0.2, 1.0, 0.3, 1.0))
 	btn_act1.disabled = false
 
-	# Act 2 unlocked if Act 1 boss defeated (level > 4) or current_act >= 2
-	var act2_unlocked: bool = GameManager.act1_max_level_unlocked > 4 or GameManager.current_act >= 2
+	# Act 2 unlocked if Act 1 boss defeated (level > 5) or current_act >= 2
+	var act2_unlocked: bool = GameManager.act1_max_level_unlocked > 5 or GameManager.current_act >= 2
 	if act2_unlocked:
 		gate2_tex.texture = tex_gerbang_buka
 		gate2_tex.modulate = Color(1, 1, 1, 1)
