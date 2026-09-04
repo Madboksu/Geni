@@ -6,6 +6,13 @@ signal reward_selected(card_id)
 
 var card_ui_scene = preload("res://scenes/battle/components/card_ui.tscn")
 
+func show_reward() -> void:
+	visible = true
+	var all_cards = CardDatabase.get_all_cards()
+	all_cards.shuffle()
+	var selected_cards = [all_cards[0], all_cards[1], all_cards[2]]
+	setup(selected_cards)
+
 func setup(cards: Array) -> void:
 	for child in container_cards.get_children():
 		child.queue_free()

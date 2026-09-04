@@ -121,25 +121,48 @@ func _animate_trail_bar() -> void:
 	tw.tween_property(trail_bar, "modulate", Color(0.8, 0.45, 0.15, 0.65), 1.3).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 
+var _back_tw: Tween
+
+func _kill_back_tw():
+	if is_instance_valid(_back_tw) and _back_tw.is_valid():
+		_back_tw.kill()
+
 func _setup_back_button_juice() -> void:
 	if not is_instance_valid(btn_back):
 		return
 	btn_back.pivot_offset = btn_back.size * 0.5
+	
+	if btn_back.has_theme_stylebox("normal"):
+		var normal_style = btn_back.get_theme_stylebox("normal")
+		var hover_style = normal_style.duplicate()
+		if hover_style is StyleBoxFlat:
+			hover_style.bg_color = hover_style.bg_color.lightened(0.1)
+			hover_style.border_color = hover_style.border_color.lightened(0.2)
+		btn_back.add_theme_stylebox_override("hover", hover_style)
+		btn_back.add_theme_stylebox_override("pressed", hover_style)
+		btn_back.add_theme_stylebox_override("focus", normal_style)
 	btn_back.mouse_entered.connect(func():
-		var tw = create_tween()
-		tw.tween_property(btn_back, "scale", Vector2(1.06, 1.06), 0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		_kill_back_tw()
+		_back_tw = create_tween()
+		GameManager.play_sfx("hover", -10.0)
+		_back_tw.tween_property(btn_back, "scale", Vector2(1.06, 1.06), 0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	)
 	btn_back.mouse_exited.connect(func():
-		var tw = create_tween()
-		tw.tween_property(btn_back, "scale", Vector2.ONE, 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		_kill_back_tw()
+		_back_tw = create_tween()
+		_back_tw.tween_property(btn_back, "scale", Vector2.ONE, 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	)
 	btn_back.button_down.connect(func():
-		var tw = create_tween()
-		tw.tween_property(btn_back, "scale", Vector2(0.96, 0.96), 0.06).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		GameManager.play_sfx("click", -5.0)
+		_kill_back_tw()
+		_back_tw = create_tween()
+		_back_tw.tween_property(btn_back, "scale", Vector2(0.96, 0.96), 0.06).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	)
 	btn_back.button_up.connect(func():
-		var tw = create_tween()
-		tw.tween_property(btn_back, "scale", Vector2(1.06, 1.06), 0.08).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		_kill_back_tw()
+		_back_tw = create_tween()
+		GameManager.play_sfx("hover", -10.0)
+		_back_tw.tween_property(btn_back, "scale", Vector2(1.06, 1.06), 0.08).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	)
 
 
@@ -151,6 +174,7 @@ func _setup_stage_node(stage_num: int, btn: Button, holder: Control) -> void:
 			if _holder_tweens.has(holder) and is_instance_valid(_holder_tweens[holder]):
 				_holder_tweens[holder].kill()
 			var tw = create_tween()
+			GameManager.play_sfx("hover", -10.0)
 			tw.tween_property(holder, "scale", Vector2(1.08, 1.08), 0.1).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 			_holder_tweens[holder] = tw
 	)
@@ -205,7 +229,7 @@ func _update_level_states() -> void:
 	_set_node_state(1, max_unlocked, box1_tex, lbl_level1_num, badge1, btn_level1, box_holder1, Color(0.15, 0.12, 0.1, 1.0))
 	_set_node_state(2, max_unlocked, box2_tex, lbl_level2_num, badge2, btn_level2, box_holder2, Color(0.15, 0.12, 0.1, 1.0))
 	_set_node_state(3, max_unlocked, box3_tex, lbl_level3_num, badge3, btn_level3, box_holder3, Color(0.15, 0.12, 0.1, 1.0))
-	_set_node_state(4, max_unlocked, box4_tex, lbl_level4_num, badge4, btn_level4, box_holder4, Color(0.15, 0.12, 0.1, 1.0))
+	_set_node_state(4, max_unlocked, box4_tex, lbl_level4_num, badge4, btn_level4, box_holder4, Color(0.95, 0.25, 0.1, 1.0))
 	_set_node_state(5, max_unlocked, box5_tex, lbl_level5_num, badge5, btn_level5, box_holder5, Color(0.95, 0.25, 0.1, 1.0))
 
 

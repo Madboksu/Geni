@@ -183,3 +183,6 @@ func get_card(id: String) -> CardData:
 	if cards.has(id):
 		return cards[id]
 	return null
+
+func get_all_cards() -> Array:
+	return cards.values()

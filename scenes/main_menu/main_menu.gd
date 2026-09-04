@@ -55,6 +55,7 @@ var _btn_tweens: Dictionary = {}
 
 func _ready() -> void:
 	_init_styles()
+	_refresh_save_slots_ui()
 	_hide_all_popups()
 
 	btn_play.pressed.connect(_on_btn_play_pressed)
@@ -144,6 +145,7 @@ func _setup_button_juice(btn: Button) -> void:
 		if _btn_tweens.has(btn) and is_instance_valid(_btn_tweens[btn]):
 			_btn_tweens[btn].kill()
 		var tw = create_tween()
+		GameManager.play_sfx("hover", -10.0)
 		tw.tween_property(btn, "scale", Vector2(1.06, 1.06), 0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 		_btn_tweens[btn] = tw
 	)
@@ -157,6 +159,7 @@ func _setup_button_juice(btn: Button) -> void:
 		_btn_tweens[btn] = tw
 	)
 	btn.button_down.connect(func():
+		GameManager.play_sfx("click", -5.0)
 		if _btn_tweens.has(btn) and is_instance_valid(_btn_tweens[btn]):
 			_btn_tweens[btn].kill()
 		var tw = create_tween()

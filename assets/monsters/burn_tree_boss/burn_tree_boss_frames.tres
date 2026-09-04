@@ -1,0 +1,46 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://b3gxlrhbmqpu2"]
+
+[ext_resource type="Texture2D" uid="uid://cc7ps2e6108uh" path="res://assets/monsters/burn_tree_boss/ANIMATED BURNING TREE BOSS1.png" id="1_f0"]
+[ext_resource type="Texture2D" uid="uid://cf3cvn8ydb1om" path="res://assets/monsters/burn_tree_boss/ANIMATED BURNING TREE BOSS2.png" id="2_f1"]
+[ext_resource type="Texture2D" uid="uid://dw6yjwddrccpo" path="res://assets/monsters/burn_tree_boss/ANIMATED BURNING TREE BOSS3.png" id="3_f2"]
+[ext_resource type="Texture2D" uid="uid://bi2bmwd3jp0cl" path="res://assets/monsters/burn_tree_boss/ANIMATED BURNING TREE BOSS4.png" id="4_f3"]
+[ext_resource type="Texture2D" uid="uid://d0an4dnxolb4y" path="res://assets/monsters/burn_tree_boss/ANIMATED BURNING TREE BOSS5.png" id="5_f4"]
+[ext_resource type="Texture2D" uid="uid://bhv415g6tcfxp" path="res://assets/monsters/burn_tree_boss/ANIMATED BURNING TREE BOSS6.png" id="6_f5"]
+[ext_resource type="Texture2D" uid="uid://cvkrpuodtc1dg" path="res://assets/monsters/burn_tree_boss/ANIMATED BURNING TREE BOSS7.png" id="7_f6"]
+[ext_resource type="Texture2D" uid="uid://c1i5b15mr2aj3" path="res://assets/monsters/burn_tree_boss/ANIMATED BURNING TREE BOSS8.png" id="8_f7"]
+[ext_resource type="Texture2D" uid="uid://bci5tb7g0bjyx" path="res://assets/monsters/burn_tree_boss/ANIMATED BURNING TREE BOSS9.png" id="9_f8"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_f0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_f1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_f2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_f3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_f4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_f5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_f6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_f7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_f8")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 6.0
+}]

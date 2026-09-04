@@ -106,3 +106,25 @@ func _get_drag_data(_at_position: Vector2) -> Variant:
 	set_drag_preview(control)
 	
 	return card_data
+
+func make_zoomed() -> void:
+	custom_minimum_size = Vector2(320, 480)
+	size = Vector2(320, 480)
+	
+	lbl_cost.add_theme_font_size_override("font_size", 28)
+	lbl_cost.position = Vector2(-100, 16)
+	lbl_cost.size = Vector2(236, 40)
+	
+	lbl_title.add_theme_font_size_override("font_size", 22)
+	lbl_title.position = Vector2(36, 300)
+	lbl_title.size = Vector2(248, 40)
+	
+	lbl_description.add_theme_font_size_override("normal_font_size", 16)
+	lbl_description.add_theme_font_size_override("bold_font_size", 16)
+	lbl_description.position = Vector2(56, 360)
+	lbl_description.size = Vector2(208, 68)
+	
+	if mouse_entered.is_connected(_on_mouse_entered):
+		mouse_entered.disconnect(_on_mouse_entered)
+	if mouse_exited.is_connected(_on_mouse_exited):
+		mouse_exited.disconnect(_on_mouse_exited)

@@ -17,8 +17,8 @@ extends Control
 @onready var lbl_act2_status: Label = %LblAct2Status
 @onready var lbl_act3_status: Label = %LblAct3Status
 
-var tex_gerbang_buka = preload("res://assets/gerbang-buka.png")
-var tex_gerbang_tutup = preload("res://assets/gerbang-tutup.png")
+var tex_gerbang_buka = preload("res://assets/gate-buka.png")
+var tex_gerbang_tutup = preload("res://assets/gate-tutup.png")
 
 func _ready() -> void:
 	_update_act_states()
@@ -32,25 +32,48 @@ func _ready() -> void:
 	_setup_hover_effect(btn_act3, act3_card)
 	_setup_back_button_juice()
 
+var _back_tw: Tween
+
+func _kill_back_tw():
+	if is_instance_valid(_back_tw) and _back_tw.is_valid():
+		_back_tw.kill()
+
 func _setup_back_button_juice() -> void:
 	if not is_instance_valid(btn_back):
 		return
 	btn_back.pivot_offset = btn_back.size * 0.5
+	
+	if btn_back.has_theme_stylebox("normal"):
+		var normal_style = btn_back.get_theme_stylebox("normal")
+		var hover_style = normal_style.duplicate()
+		if hover_style is StyleBoxFlat:
+			hover_style.bg_color = hover_style.bg_color.lightened(0.1)
+			hover_style.border_color = hover_style.border_color.lightened(0.2)
+		btn_back.add_theme_stylebox_override("hover", hover_style)
+		btn_back.add_theme_stylebox_override("pressed", hover_style)
+		btn_back.add_theme_stylebox_override("focus", normal_style)
 	btn_back.mouse_entered.connect(func():
-		var tw = create_tween()
-		tw.tween_property(btn_back, "scale", Vector2(1.06, 1.06), 0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		_kill_back_tw()
+		_back_tw = create_tween()
+		GameManager.play_sfx("hover", -10.0)
+		_back_tw.tween_property(btn_back, "scale", Vector2(1.06, 1.06), 0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	)
 	btn_back.mouse_exited.connect(func():
-		var tw = create_tween()
-		tw.tween_property(btn_back, "scale", Vector2.ONE, 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		_kill_back_tw()
+		_back_tw = create_tween()
+		_back_tw.tween_property(btn_back, "scale", Vector2.ONE, 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	)
 	btn_back.button_down.connect(func():
-		var tw = create_tween()
-		tw.tween_property(btn_back, "scale", Vector2(0.96, 0.96), 0.06).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		GameManager.play_sfx("click", -5.0)
+		_kill_back_tw()
+		_back_tw = create_tween()
+		_back_tw.tween_property(btn_back, "scale", Vector2(0.96, 0.96), 0.06).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	)
 	btn_back.button_up.connect(func():
-		var tw = create_tween()
-		tw.tween_property(btn_back, "scale", Vector2(1.06, 1.06), 0.08).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		_kill_back_tw()
+		_back_tw = create_tween()
+		GameManager.play_sfx("hover", -10.0)
+		_back_tw.tween_property(btn_back, "scale", Vector2(1.06, 1.06), 0.08).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	)
 
 var _card_tweens: Dictionary = {}
@@ -62,6 +85,7 @@ func _setup_hover_effect(btn: Button, card: Control) -> void:
 			if _card_tweens.has(card) and is_instance_valid(_card_tweens[card]):
 				_card_tweens[card].kill()
 			var tw = create_tween()
+			GameManager.play_sfx("hover", -10.0)
 			tw.tween_property(card, "scale", Vector2(1.05, 1.05), 0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 			_card_tweens[card] = tw
 	)
@@ -81,7 +105,7 @@ func _update_act_states() -> void:
 	btn_act1.disabled = false
 
 	# Act 2 unlocked if Act 1 boss defeated (level > 5) or current_act >= 2
-	var act2_unlocked: bool = GameManager.act1_max_level_unlocked > 5 or GameManager.current_act >= 2
+	var act2_unlocked: bool = true
 	if act2_unlocked:
 		gate2_tex.texture = tex_gerbang_buka
 		gate2_tex.modulate = Color(1, 1, 1, 1)

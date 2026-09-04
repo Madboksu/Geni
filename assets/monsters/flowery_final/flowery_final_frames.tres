@@ -1,0 +1,166 @@
+[gd_resource type="SpriteFrames" load_steps=40 format=3 uid="uid://flowery_final_frames"]
+
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_0" path="res://assets/monsters/flowery_final/frame_00.png" id="1_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_1" path="res://assets/monsters/flowery_final/frame_01.png" id="2_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_2" path="res://assets/monsters/flowery_final/frame_02.png" id="3_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_3" path="res://assets/monsters/flowery_final/frame_03.png" id="4_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_4" path="res://assets/monsters/flowery_final/frame_04.png" id="5_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_5" path="res://assets/monsters/flowery_final/frame_05.png" id="6_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_6" path="res://assets/monsters/flowery_final/frame_06.png" id="7_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_7" path="res://assets/monsters/flowery_final/frame_07.png" id="8_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_8" path="res://assets/monsters/flowery_final/frame_08.png" id="9_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_9" path="res://assets/monsters/flowery_final/frame_09.png" id="10_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_10" path="res://assets/monsters/flowery_final/frame_10.png" id="11_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_11" path="res://assets/monsters/flowery_final/frame_11.png" id="12_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_12" path="res://assets/monsters/flowery_final/frame_12.png" id="13_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_13" path="res://assets/monsters/flowery_final/frame_13.png" id="14_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_14" path="res://assets/monsters/flowery_final/frame_14.png" id="15_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_15" path="res://assets/monsters/flowery_final/frame_15.png" id="16_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_16" path="res://assets/monsters/flowery_final/frame_16.png" id="17_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_17" path="res://assets/monsters/flowery_final/frame_17.png" id="18_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_18" path="res://assets/monsters/flowery_final/frame_18.png" id="19_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_19" path="res://assets/monsters/flowery_final/frame_19.png" id="20_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_20" path="res://assets/monsters/flowery_final/frame_20.png" id="21_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_21" path="res://assets/monsters/flowery_final/frame_21.png" id="22_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_22" path="res://assets/monsters/flowery_final/frame_22.png" id="23_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_23" path="res://assets/monsters/flowery_final/frame_23.png" id="24_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_24" path="res://assets/monsters/flowery_final/frame_24.png" id="25_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_25" path="res://assets/monsters/flowery_final/frame_25.png" id="26_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_26" path="res://assets/monsters/flowery_final/frame_26.png" id="27_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_27" path="res://assets/monsters/flowery_final/frame_27.png" id="28_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_28" path="res://assets/monsters/flowery_final/frame_28.png" id="29_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_29" path="res://assets/monsters/flowery_final/frame_29.png" id="30_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_30" path="res://assets/monsters/flowery_final/frame_30.png" id="31_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_31" path="res://assets/monsters/flowery_final/frame_31.png" id="32_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_32" path="res://assets/monsters/flowery_final/frame_32.png" id="33_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_33" path="res://assets/monsters/flowery_final/frame_33.png" id="34_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_34" path="res://assets/monsters/flowery_final/frame_34.png" id="35_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_35" path="res://assets/monsters/flowery_final/frame_35.png" id="36_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_36" path="res://assets/monsters/flowery_final/frame_36.png" id="37_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_37" path="res://assets/monsters/flowery_final/frame_37.png" id="38_flowery_final"]
+[ext_resource type="Texture2D" uid="uid://flowery_final_frame_38" path="res://assets/monsters/flowery_final/frame_38.png" id="39_flowery_final"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_flowery_final")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_flowery_final")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 8.0
+}]

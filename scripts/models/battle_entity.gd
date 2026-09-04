@@ -10,6 +10,7 @@ signal status_changed()
 @export var current_hp: int = 50
 @export var current_block: int = 0
 @export var is_player: bool = false
+var is_boss: bool = false
 
 # Statuses
 @export var is_wet: bool = false

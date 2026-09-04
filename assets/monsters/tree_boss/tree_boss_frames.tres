@@ -1,0 +1,38 @@
+[gd_resource type="SpriteFrames" load_steps=8 format=3 uid="uid://tree_boss_frames"]
+
+[ext_resource type="Texture2D" uid="uid://tree_boss_frame_0" path="res://assets/monsters/tree_boss/frame_0.png" id="1_tree_boss"]
+[ext_resource type="Texture2D" uid="uid://tree_boss_frame_1" path="res://assets/monsters/tree_boss/frame_1.png" id="2_tree_boss"]
+[ext_resource type="Texture2D" uid="uid://tree_boss_frame_2" path="res://assets/monsters/tree_boss/frame_2.png" id="3_tree_boss"]
+[ext_resource type="Texture2D" uid="uid://tree_boss_frame_3" path="res://assets/monsters/tree_boss/frame_3.png" id="4_tree_boss"]
+[ext_resource type="Texture2D" uid="uid://tree_boss_frame_4" path="res://assets/monsters/tree_boss/frame_4.png" id="5_tree_boss"]
+[ext_resource type="Texture2D" uid="uid://tree_boss_frame_5" path="res://assets/monsters/tree_boss/frame_5.png" id="6_tree_boss"]
+[ext_resource type="Texture2D" uid="uid://tree_boss_frame_6" path="res://assets/monsters/tree_boss/frame_6.png" id="7_tree_boss"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_tree_boss")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_tree_boss")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_tree_boss")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_tree_boss")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_tree_boss")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_tree_boss")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_tree_boss")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 6.0
+}]
